@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}
+Product Analyzer | Category
+{% endblock %}
+
+{% block content %}
+
+{% load static %}
+
+<section class="category-hero-section flex items-center justify-center text-center text-white relative">
+    <h1 class="text-6xl font-bold text-white uppercase">
+        Categories
+    </h1>
+</section>
+
+<main class="category-container ml-[5rem] mr-[5rem]">
+    <div class="grid grid-cols-3 gap-10">
+        {% for category in categories %}
+        <div class="category-card bg-white shadow-md rounded-lg overflow-hidden">
+            <a href="{% url 'products-list-page' category.category_id %}" class="text-decoration-none">
+                <img alt="{{ category.category_name }}" class="w-full h-48 object-cover" height="300"
+                    src="{{ category.category_image.url }}" width="400" />
+                <p>{{category.category_images.url}}</p>
+                <div class="p-4">
+                    <h2 class="text-xl font-bold text-gray-800">
+                        {{ category.category_name | title }}
+                    </h2>
+                    <p class="text-gray-600">
+                        Compare the latest {{ category.category_name }} and find the best one for you.
+                    </p>
+                </div>
+            </a>
+        </div>
+
+        {% endfor %}
+    </div>
+</main>
+
+{% endblock %}

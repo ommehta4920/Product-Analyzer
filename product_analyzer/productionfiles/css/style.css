@@ -1,0 +1,404 @@
+body {
+    nav-index: none;
+    user-select: none;
+}
+
+/* HOME PAGE */
+
+.hero-section {
+    background: radial-gradient(ellipse 120% 210% at 95% 0, #531889 10%, #000 70%);
+    min-height: 100vh;
+}
+
+.hero-section h1{
+    color: white;
+}
+
+.hero-section h1 .underline-text {
+    position: relative;
+    display: inline-block;
+}
+
+.hero-section h1 .underline-text::after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 10px;
+    background: transparent linear-gradient(92deg, #3c59fc, #7600e0) 0 0 no-repeat padding-box;
+    margin-top: -15px;
+    left: 0;
+    z-index: -1;
+    margin-left: 0px;
+}
+
+.header {
+    display: flex;
+    height: 7.5vh;
+    transition: background-color 0.3s;
+}
+
+.header.scrolled {
+    background-color: black;
+}
+
+.header.scrolled .login a {
+    color: white;
+    background: transparent;
+}
+
+.header.scrolled .login a:hover {
+    color: white;
+}
+
+.header nav .header-link:hover {
+    text-shadow: 0 1px 1px white;
+    transition: 0.2s ease-in-out;
+}
+
+.scroll-down {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    cursor: pointer;
+}
+
+.search-section {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+}
+
+.search-bar {
+    width: 55%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
+    border-radius: 100px;
+    padding: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.search-bar input {
+    color: black;
+    border: none;
+    outline: none;
+    padding: 0 10px;
+    border-radius: 9999px;
+    flex: 1;
+}
+
+.search-section button {
+    background: black;
+    color: white;
+    border: none;
+    outline: none;
+    padding: 0.5rem 1rem;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.search-section button:hover {
+    box-shadow: 4px 0px 15px rgba(255, 255, 255, 0.3);
+    transform: translateY(-1px);
+    transition: 0.2s ease-in-out;
+}
+
+.row {
+    display: flex;
+    padding: 0 4px;
+}
+
+.column {
+    flex: 25%;
+    max-width: 60%;
+    padding: 0 4px;
+}
+
+.card {
+    margin: 20px 10px;
+    cursor: pointer;
+}
+
+.text_sec_btns .category:hover {
+    box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.7);
+    transform: translateY(-1px);
+    transition: 0.5s ease-in-out;
+}
+
+/* CATEGORIES PAGE */
+
+.category-hero-section {
+    background: radial-gradient(ellipse 120% 210% at 95% 0, #531889 10%, #000 70%);
+    min-height: 50vh;
+}
+
+.category-hero-section h1::after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 10px;
+    background: transparent linear-gradient(92deg, #3c59fc, #7600e0) 0 0 no-repeat padding-box;
+    margin-top: -15px;
+    z-index: -1;
+}
+
+.category-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: 3rem 0;
+}
+
+.category-container .category-card {
+    box-shadow: 4px 0px 15px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    width: 300px;
+    margin: 20px;
+}
+
+/* PRODUCTS LIST PAGE */
+
+.product-hero-section {
+    background: radial-gradient(ellipse 120% 210% at 95% 0, #531889 10%, #000 70%);
+    min-height: 50vh;
+}
+
+.product-hero-section h1 .product-hero-title-span {
+    position: relative;
+    display: inline-block;
+}
+
+.product-hero-section h1 .product-hero-title-span::after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 10px;
+    background: transparent linear-gradient(92deg, #3c59fc, #7600e0) 0 0 no-repeat padding-box;
+    margin-top: -15px;
+    z-index: -1;
+}
+
+.product-card-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-items: center;
+    margin: 3rem 5rem;
+    padding: 0 2rem;
+}
+
+.product-card {
+    box-shadow: 4px 1px 15px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    width: 300px;
+    margin: 20px;
+    display: flex;
+    flex-direction: column;
+    height: 50vh;
+    object-fit: cover;
+    flex-grow: 1;
+}
+
+/* PRODUCT DETAILS PAGE */
+
+.productdetail-hero-section {
+    background: radial-gradient(ellipse 120% 210% at 95% 0, #531889 10%, #000 70%);
+    min-height: 50vh;
+}
+
+.productdetail-hero-section h1 .productdetail-hero-title-span {
+    position: relative;
+    display: inline-block;
+}
+
+.productdetail-hero-section h1 .productdetail-hero-title-span::after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 10px;
+    background: transparent linear-gradient(92deg, #3c59fc, #7600e0) 0 0 no-repeat padding-box;
+    margin-top: -15px;
+    z-index: -1;
+}
+
+/* COMPARISION PAGE */
+
+.comparison-hero-section {
+    background: radial-gradient(ellipse 120% 210% at 95% 0, #531889 10%, #000 70%);
+    min-height: 50vh;
+}
+
+.comparison-hero-section h1 .comparison-hero-title-span {
+    position: relative;
+    display: inline-block;
+}
+
+.comparison-hero-section h1 .comparison-hero-title-span::after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 10px;
+    background: transparent linear-gradient(92deg, #3c59fc, #7600e0) 0 0 no-repeat padding-box;
+    margin-top: -15px;
+    z-index: -1;
+}
+
+.comaprison-container .comparison-subcontainer {
+    box-shadow: 4px 2px 15px rgba(0, 0, 0, 0.5);
+    background: white;
+}
+
+.comparison-subcontainer table tr {
+    min-height: 10vh;
+    height: 15vh;
+}
+
+.comparison-subcontainer table tr:nth-child(even) {
+    background: rgb(243 244 246);
+
+}
+
+.comparison-subcontainer table tr img {
+    box-shadow: 4px 1px 15px rgba(0, 0, 0, 0.2);
+}
+
+.comparison-subcontainer table tbody tr th {
+    font-size: 18px;
+}
+
+.comparison-subcontainer table tbody tr td {
+    font-size: 18px;
+}
+
+/* LOGIN PAGE */
+
+.body-container {
+    width: 35vw;
+    display: flex;
+    flex-direction: column;
+    /* opacity: 0.2; */
+    background-color: rgba(89, 131, 83, 0.2);
+    backdrop-filter: blur(2px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1em;
+}
+
+.signin-top-container h2 {
+    color: white;
+    padding: 0;
+    margin: 0;
+}
+
+.form-div {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.form-div form {
+    width: 95%;
+}
+
+form input {
+    background: transparent;
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    outline: none;
+    padding: 0 10px;
+    border-radius: 9999px;
+    flex: 1;
+    margin-bottom: 4px;
+}
+
+form button {
+    background: transparent;
+    width: 45%;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    outline: none;
+    padding: 0 10px;
+    border-radius: 9999px;
+    align-self: center;
+    justify-self: center;
+}
+
+.signin-btn-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 10px;
+}
+
+/* REGISTRATION PAGE */
+
+.body-container {
+    width: 35vw;
+    display: flex;
+    flex-direction: column;
+    /* opacity: 0.2; */
+    background-color: rgba(89, 131, 83, 0.2);
+    backdrop-filter: blur(2px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1em;
+}
+
+.signup-top-container h2 {
+    color: white;
+    padding: 0;
+    margin: 0;
+}
+
+.form-div {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.form-div form {
+    width: 95%;
+}
+
+form input {
+    background: transparent;
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    outline: none;
+    padding: 0 10px;
+    border-radius: 9999px;
+    flex: 1;
+    margin-bottom: 4px;
+}
+
+form button {
+    background: transparent;
+    width: 45%;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    outline: none;
+    padding: 0 10px;
+    border-radius: 9999px;
+    align-self: center;
+    justify-self: center;
+}
+
+.signup-btn-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 10px;
+}

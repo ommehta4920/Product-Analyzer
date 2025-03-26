@@ -1,0 +1,305 @@
+{% extends "base.html" %}
+
+{% block title %}
+Product Analyzer | Comparison
+{% endblock %}
+
+{% block content %}
+
+<section class="comparison-hero-section flex items-center justify-center text-center text-white relative">
+    <h1 class="text-6xl font-bold text-white uppercase">
+        Product
+        <span class="comparison-hero-title-span">Comparison</span>
+    </h1>
+</section>
+
+<div style="display: flex; flex-direction: column; justify-content: center; align-items: center;" class="w-100">
+    <div class="bg-white p-6 rounded shadow w-75" style="margin: 2% 0;">
+        <div class="mb-4">
+            <label for="category" class="block text-sm font-medium text-gray-700">Category</label>
+            <select id="category"
+                class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                <option value="" disabled selected>
+                    Select Category
+                </option>
+                {% for category in category_data %}
+                <option value="{{ category.category_id }}">
+                    {{ category.category_name }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="mb-4">
+            {% for i in "1234" %}
+            <div class="product-selector mb-2 {% if i|add:-1 >= 2 %}hidden{% endif %}">
+                <label for="product{{ i }}" class="block text-sm font-medium text-gray-700">Product {{ i }}</label>
+                <div class="dropdown relative">
+                    <input type="text" placeholder="Search..." id="input{{ i }}" onclick="toggleDropdown('dropdown{{ i }}')"
+                        onkeyup="filterDropdown('input{{ i }}', 'dropdown{{ i }}')" class="w-full px-3 py-2 border rounded">
+                    <div id="dropdown{{ i }}" class="dropdown-content w-full bg-white border rounded shadow hidden"></div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="flex justify-evenly items-center mb-4 w-100" >
+            <button id="decrease-btn" class="bg-red-500 text-white px-4 py-2 rounded shadow hover:bg-red-600 w-[10%]"><strong>-</strong></button>
+            <button id="compare-btn"
+            class="bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600 w-[70%]"><strong>Compare</strong></button>
+            <button id="increase-btn" class="bg-green-500 text-white px-4 py-2 rounded shadow hover:bg-green-600 w-[10%]"><strong>+</strong></button>
+        </div>
+    </div>
+    <div id="comparison-section"
+        class="bg-white p-6 rounded shadow mt-6 gap-4 w-[90%] h-auto" style="margin: 2% 0; min-height: 0; overflow: hidden; display: none;">
+        <p>Product Comparison Will Display Here...</p>
+    </div>
+</div>
+
+<script>
+    let selectedProductDetails = {};
+
+    function toggleDropdown(dropdownId) {
+        const dropdown = document.getElementById(dropdownId);
+        if(!dropdown) {
+            console.error(`Dropdown element not found:`,dropdownId);
+            return;
+        }
+
+        document.querySelectorAll(".dropdown-content").forEach(d => {
+            if (d.id !== dropdownId) {
+                d.classList.add("hidden");
+                d.style.display = "none";
+            }
+        });
+
+        if (dropdown.classList.contains("hidden") || dropdown.style.display === "none") {
+            dropdown.classList.remove("hidden");
+            dropdown.style.display = "block";
+        } else {
+            dropdown.classList.add("hidden");
+            dropdown.style.display = "none";
+        }
+    }
+
+    function filterDropdown(inputId, dropdownId) {
+        let input = document.getElementById(inputId).value.toUpperCase();
+        let dropdown = document.getElementById(dropdownId);
+        let options = dropdown.getElementsByTagName("a");
+
+        for (let i = 0; i < options.length; i++) {
+            let txtValue = options[i].textContent || options[i].innerText;
+            options[i].style.display = txtValue.toUpperCase().includes(input) ? "" : "none";
+        }
+    }
+
+    function updateDropdown(dropdownId, inputId, products_detail) {
+        const dropdown = document.getElementById(dropdownId);
+        dropdown.innerHTML = "";
+
+        console.log(`Updating dropdown ${dropdownId} with products:`, products_detail);
+
+        if (!products_detail || products_detail.length === 0) {
+            dropdown.innerHTML = "<p class='text-gray-500 p-2'>No products available</p>";
+            return;
+        }
+
+        products_detail.forEach(product => {
+            let productOption = document.createElement("a");
+            productOption.href = "#";
+            productOption.textContent = product.product_name;
+            productOption.onclick = function (event) {
+                event.preventDefault();
+                document.getElementById(inputId).value = product.product_name;
+
+                selectedProductDetails[inputId] = product;
+
+                updateCompareButtonState();
+
+                dropdown.classList.add("hidden");
+                dropdown.style.display = "none";
+            };
+            dropdown.appendChild(productOption);
+        });
+        dropdown.classList.add("hidden");
+        dropdown.style.display = "none";
+    }
+
+    function updateCompareButtonState() {
+        const selectedProducts = [];
+        
+        document.querySelectorAll('.product-selector input').forEach(input => {
+            if (input.value.trim() !== "") {
+                selectedProducts.push(input.value);
+            }
+        });
+
+        // Enable the button if at least 2 unique products are selected
+        const compareBtn = document.getElementById('compare-btn');
+        compareBtn.disabled = selectedProducts.length < 2;
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        let productCount = 2;
+        const categorySelect = document.getElementById("category");
+        const compareBtn = document.getElementById("compare-btn");
+        const comparisonSection = document.getElementById("comparison-section");
+
+        function updateProductSelectors() {
+            document.querySelectorAll('.product-selector').forEach((selector, index) => {
+                selector.classList.toggle('hidden', index >= productCount);
+            });
+        }
+
+        // Selecting Category and Fetching Products
+        document.getElementById("category").addEventListener("change", function () {
+            const category = this.value;
+            fetch(`/comparison/${category}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Received Data:", data);
+                    if (data.error) {
+                        alert(data.error);
+                        return;
+                    }
+                    if (!data.products_detail || data.products_detail.length === 0) {
+                        alert("No Products found for this category.");
+                        return;
+                    }
+                    for (let i = 1; i <= 4; i++) {
+                        updateDropdown(`dropdown${i}`, `input${i}`, data.products_detail);
+                    }
+                })
+                .catch(error => console.error("Error fetching products:", error));
+        });
+
+        // Click Anywhere
+        document.addEventListener("click", function (event) {
+            document.querySelectorAll(".dropdown-content").forEach(dropdown => {
+                if (!dropdown.parentElement.contains(event.target) && !event.target.matches('.product-selector input')) {
+                    dropdown.classList.add("hidden");
+                    dropdown.style.display = "none";
+                }
+            });
+        });
+
+        // Increase Button
+        document.getElementById('increase-btn').addEventListener('click', function () {
+            if (productCount < 4) {
+                productCount++;
+                updateProductSelectors();
+            } else {
+                alert("Maximum 4 products are allowed for the compare.")
+            }
+        });
+
+        // Decrease Button
+        document.getElementById('decrease-btn').addEventListener('click', function () {
+            if (productCount > 2) {
+                productCount--;
+                const hiddenInput = document.querySelectorAll('.product-selector')[productCount].querySelector('input');
+
+                // Clear the value of the hidden input field
+                hiddenInput.value = "";
+                delete selectedProductDetails[hiddenInput.id];
+                updateProductSelectors();
+            } else {
+                alert("Minimum 2 products are required for the comparision.")
+            }
+        });
+
+        // Comparison Button
+        function trimProductName(name, maxLength = 20) {
+            return name.length > maxLength ? name.substring(0, maxLength) + "..." : name;
+        }
+
+        function getLatestPrice(priceData) {
+            if (!priceData || Object.keys(priceData).length === 0) {
+                return "N/A"; // If no price data available
+            }
+
+            // Get all dates and sort them in descending order
+            const latestDate = Object.keys(priceData).sort((a, b) => new Date(b) - new Date(a))[0];
+
+            return priceData[latestDate]; // Return the latest price
+        }
+
+        function extractProductDetails(productData){
+            return {
+                model: productData["General"]?.["Model Number"] || productData["General"]?.["Model Name"] || productData["Model Name"] || productData["Item model number"] || "N/A", 
+
+                os: productData["Operating System"]?.["Operating System"] || productData["Os & Processor Features"]?.["Operating System"] || productData["Operating System"] || productData["OS"] || productData["Smart Tv Features"]?.["Operating System"] || "N/A",
+
+                ram: productData["Processor And Memory Features"]?.["RAM"] || productData["Memory & Storage Features"]?.["RAM"] || productData["Ram Memory Installed Size"] || productData["RAM"] || productData["RAM Size"] || productData["Smart Tv Features"]?.["Ram Capacity"] || "N/A",
+
+                size: productData["Display And Audio Features"]?.["Screen Size"] || productData["Display Features"]?.["Display Size"] || productData["General"]?.["Display Size"] || productData["Standing screen display size"] || productData["Product Dimensions"[0]] || "N/A",
+
+                reolution: productData["Display And Audio Features"]?.["Screen Resolution"]|| productData["Display Features"]?.["Resolution"] || productData["Resolution"] || productData["General"]?.["HD Technology & Resolution"] || "N/A" ,
+                
+                weight: productData["Dimensions"]?.["Weight"] || productData["Item Weight"] || "N/A" , 
+            };
+        }
+
+        // Hide the comparison section initially
+        comparisonSection.style.display = "none";
+
+        compareBtn.addEventListener('click', function () {
+            if (this.disabled) return;
+
+            const selectedProducts = [];
+            const comparisonSection = document.getElementById('comparison-section');
+            comparisonSection.innerHTML = "";
+
+            let duplicateFound = false;
+            let productInputs = document.querySelectorAll('.product-selector input');
+
+            productInputs.forEach(input => {
+                let productName = input.value;
+                if (productName) {
+                    if (selectedProducts.includes(productName)) {
+                        duplicateFound = true;
+                    }
+                    selectedProducts.push(productName);
+                }
+            });
+
+            if (duplicateFound) {
+                alert("Please Select Different Products for Comparison...");
+                return;
+            }
+
+            if (selectedProducts.length < 2) {
+                alert('Please Select at least different products for comparison.');
+                return;
+            }
+
+            selectedProducts.forEach(productName => {
+                let productDetails = Object.values(selectedProductDetails).find(p=>p.product_name === productName);
+
+                if (productDetails) {
+                    const productDiv = document.createElement('div');
+                    productDiv.classList.add('comparison-card');
+
+                    const latestPrice = getLatestPrice(productDetails.product_price)
+                    const extractedDetails = extractProductDetails(productDetails.product_details)
+                    const p_name = trimProductName(productDetails.product_name);
+                    productDiv.innerHTML = `
+                        <h3 class="text-xl font-bold mb-2">${p_name}</h3>
+                        <img src="${productDetails.product_image}" alt="Image of ${p_name}" class="mb-2 w-100 h-50 object-cover rounded">
+                        <p class="text-gray-700 p-2"><strong>Price:</strong> ${latestPrice}</p>
+                        <p class="text-gray-700 p-2"><strong>Rating:</strong> ${productDetails.product_rating}</p>
+                        <p class="text-gray-700 p-2"><strong>Model:</strong> ${extractedDetails.model}</p>
+                        <p class="text-gray-700 p-2"><strong>OS:</strong> ${extractedDetails.os}</p>
+                        <p class="text-gray-700 p-2"><strong>RAM:</strong> ${extractedDetails.ram}</p>
+                        <p class="text-gray-700 p-2"><strong>Display Size:</strong> ${extractedDetails.size}</p>
+                        <p class="text-gray-700 p-2"><strong>Display Resolution:</strong> ${extractedDetails.reolution}</p>
+                        <p class="text-gray-700 p-2"><strong>Weight:</strong> ${extractedDetails.weight}</p>
+                    `;
+
+                    comparisonSection.appendChild(productDiv);
+                }
+            });
+        });
+        comparisonSection.style.display = "flex";
+        updateProductSelectors();
+    });
+</script>
+{% endblock %}

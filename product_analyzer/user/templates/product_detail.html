@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+
+{% block title %}
+Product Analyzer | Product Detail
+{% endblock %}
+
+{% block content %}
+
+<section class="productdetail-hero-section flex items-center justify-center text-center text-white relative">
+    <h1 class="text-6xl font-bold text-white uppercase">
+        {{ c_name| title }}
+        <span class="productdetail-hero-title-span">Details</span>
+    </h1>
+</section>
+
+<div class="flex flex-col items-center">
+    <div class="bg-white p-6 rounded-lg shadow-lg m-[3rem] mb-[2rem] w-[90%]">
+        <div class="flex flex-col md:flex-row">
+            <div class="md:w-1/3 flex flex-row items-top justify-center">
+                <img alt="{{ product_data.product_name }}"
+                    class="rounded-lg h-[400px]"
+                    src="{{ product_data.product_image_url.0 }}"
+                    width="300" />
+            </div>
+            <div class="md:w-2/3 mt-4 md:mt-0" style="display: flex; flex-direction: column; justify-content: top; align-items: left; margin: 20px;">
+                <h1 class="text-3xl font-bold text-gray-800">
+                    {{ product_data.product_name }}
+                </h1>
+                <div class="mt-4 flex flex-row align-center">
+                    <div class="mt-4 p-4 bg-gray-100 rounded-lg">
+                        <span class="text-xl font-bold text-gray-800">Price: </span>
+                        <span class="text-2xl font-bold text-gray-800">
+                            {{ product_data.currency }} {{ last_price }}
+                        </span>
+                    </div>
+                    <div class="mt-4 p-4 ml-5 flex flex-row align-center bg-gray-100 rounded-lg">
+                        <span class="text-xl font-bold text-gray-800">Ratings: </span>
+                        <span class="text-2xl font-bold text-gray-800 mt-[-2] ml-2">
+                             {{ product_data.product_ratings }}
+                        </span>
+                        <i class="fa fa-star text-warning ml-1 text-xl text-black"></i>
+                    </div>
+                </div>
+                <div class=" space-x-4 flex flex-row " style="margin: 25px 0;">
+                    <a href="{% url 'product-comparison-page' category.category_id product_data.product_id %}" class="bg-gradient-to-r from-blue-400 to-blue-600 text-white px-8 py-3 rounded-full shadow-lg hover:from-blue-500 hover:to-blue-700 transform hover:scale-105 transition-transform duration-300 btn btn-primary">
+                            <i class="fas fa-exchange-alt mr-2">
+                            </i>
+                            Compare
+                    </a>
+                    <a
+                        class="bg-gradient-to-r from-green-400 to-green-600 text-white px-8 py-3 rounded-full shadow-lg hover:from-green-500 hover:to-green-700 transform hover:scale-105 transition-transform duration-300">
+                        <i class="fas fa-share-alt mr-2">
+                        </i>
+                        Share
+                    </a>
+                    <a href="{{ product_data.product_url }}" target="_blank"
+                        class="bg-gradient-to-r from-red-400 to-red-600 text-white px-8 py-3 rounded-full shadow-lg hover:from-red-500 hover:to-red-700 transform hover:scale-105 transition-transform duration-300">
+                        <i class="fas fa-shopping-cart mr-2">
+                        </i>
+                        Buy
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="bg-white p-6 rounded-lg shadow-lg mt-8 flex flex-col w-[90%] items-top justify-evenly flexwrap">
+        <div class="w-100" style="width: 100%; height: 40%;">
+            <h2 class="text-2xl font-bold text-gray-800">
+                Price History
+            </h2>
+        </div>
+        <canvas id="priceHistoryChart" class="rounded-lg mt-[10px]" height="150" width="400"></canvas>
+        <!-- <div>
+            <h2 class="text-2xl font-bold text-gray-800">
+                Overall Performance
+            </h2>
+            <canvas id="radarChart" class="mt-[10px]" width="400" height="400"></canvas>
+        </div>
+        <div>
+            <h2 class="text-2xl font-bold text-gray-800">
+                Ratings
+            </h2>
+            <canvas id="ratings-piechart" class="mt-[10px]"></canvas>
+
+        </div> -->
+    </div>
+    <div class="bg-white p-6 rounded-lg shadow-lg m-[2rem] mb-[4rem] w-[90%]">
+        <h2 class="text-2xl font-bold text-gray-800">
+            Specifications
+        </h2>
+        {% for category, details in product_data.product_details.items %}
+        <div class="grid grid-cols-1 md:grid-cols-1 gap-4 mt-4 pl-6">
+            <div>
+                <h3 class="text-xl font-semibold" style="font-weight: 700; ">
+                    {{ category }}
+                </h3>
+                <ul class="mt-2 text-gray-600" style="margin: 10px 20px;">
+                    {% for key, value in details.items %}
+                        <li style="font-weight: 500; padding: 5px 0; list-style: disc;">
+                            <span style="font-weight: 700; color: rgb(60, 59, 59);">{{ key }}</span>: {{ value }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% block scripts %}
+
+<!-- <script>
+    function redirectToCompare(){
+        window.location.href = "/comparison/" + {{ product_data.product_id }} + "/";
+    }
+</script> -->
+
+<script>
+    function priceHistoryGraph() {
+        const priceHistoryCtx = document.getElementById('priceHistoryChart').getContext('2d');
+        const priceHistoryChart = new Chart(priceHistoryCtx, {
+            type: 'line',
+            data: {
+                labels: [{% for label in chartLabels %}'{{label}}', {% endfor %}],
+                datasets: [{
+                    label: 'Price',
+                    data: [{% for value in chartValues %}{{value}}, {% endfor %}],
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1,
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: false
+                    }
+                }
+            }
+        });
+    }
+    document.addEventListener("DOMContentLoaded", function () {
+        priceHistoryGraph();
+    });
+    // function radarChart() {
+    //     const radarCtx = document.getElementById('radarChart').getContext('2d');
+    //     const radarChart = new Chart(radarCtx, {
+    //         type: 'radar',
+    //         data: {
+    //             labels: ['Display', 'Performance', 'Camera', 'Battery', 'Design', 'Software'],
+    //             datasets: [{
+    //                 label: 'Oppo Find N5',
+    //                 data: [9, 8, 9, 7, 8, 9],
+    //                 backgroundColor: "rgba(54, 162, 235, 0.2)",
+    //                 borderColor: "rgba(54, 162, 235, 1)",
+    //                 borderWidth: 1
+    //             }]
+    //         },
+    //         options: {
+    //             scale: {
+    //                 ticks: {
+    //                     beginAtZero: true,
+    //                     max: 10
+    //                 }
+    //             }
+    //         }
+    //     });
+    // }
+    // document.addEventListener("DOMContentLoaded", function () {
+    //     radarChart();
+    // });
+
+    // function createChart() {
+    //     const pieCtx = document.getElementById('ratings-piechart').getContext('2d');
+    //     new Chart(pieCtx, {
+    //         type: 'pie',
+    //         data: {
+    //             labels: ['5 Stars', '4 Stars', '3 Stars', '2 Stars', '1 Star'],
+    //             datasets: [{
+    //                 label: 'Ratings',
+    //                 data: [60, 25, 10, 3, 2],
+    //                 backgroundColor: [
+    //                     'rgba(255, 99, 132, 0.2)',
+    //                     'rgba(54, 162, 235, 0.2)',
+    //                     'rgba(255, 206, 86, 0.2)',
+    //                     'rgba(75, 192, 192, 0.2)',
+    //                     'rgba(153, 102, 255, 0.2)'
+    //                 ],
+    //                 borderColor: [
+    //                     'rgba(255, 99, 132, 1)',
+    //                     'rgba(54, 162, 235, 1)',
+    //                     'rgba(255, 206, 86, 1)',
+    //                     'rgba(75, 192, 192, 1)',
+    //                     'rgba(153, 102, 255, 1)'
+    //                 ],
+    //                 borderWidth: 1
+    //             }]
+    //         },
+    //     });
+    // }
+    // document.addEventListener("DOMContentLoaded", function () {
+    //     createChart();
+    // });
+
+</script>
+
+{% endblock scripts %}
+
+{% endblock %}

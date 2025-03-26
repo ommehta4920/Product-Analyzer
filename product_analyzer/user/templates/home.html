@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+{% block title %}
+Product Analyzer
+{% endblock %}
+
+{% block content %}
+
+<!-- Hero Section -->
+<section class="hero-section flex items-center justify-center text-center text-white relative">
+    <div class="flex flex-col items-center">
+        <h1 class="text-6xl font-bold mb-4 uppercase">
+            Compare
+            <span class="underline-text">Electornic Items</span>
+        </h1>
+        <p class="text-xl mb-8">
+            Find the best product or service for your needs
+        </p>
+        <div class="search-section">
+            <div class="search-bar flex justify-evenly">
+                <input placeholder="Search for a comparison..." type="text" />
+            </div>
+            <button>
+                Search
+            </button>
+        </div>
+    </div>
+    </div>
+    <div class="scroll-down">
+        <i class="fas fa-chevron-down text-3xl text-white-50">
+        </i>
+    </div>
+</section>
+
+
+<!-- Popular Comparisons -->
+<section class="py-12 p-[100px]" id="popular-comparisons">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold text-gray-800 mb-8 pt-[2px]">
+            Popular Comparisons
+        </h2>
+        <div class="row">
+            <div class="column">
+                <div class="card bg-white p-6 rounded-lg shadow">
+                    <img alt="Comparison between two smartphones" class="w-full h-40 object-cover mb-4" height="200"
+                        src="https://storage.googleapis.com/a1aa/image/N2caYg3AsWKrNHrTDZ0XmLJCyCy1BjM65Z8UxEMqP0M.jpg"
+                        width="300" />
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">
+                        Smartphone A vs Smartphone B
+                    </h3>
+                    <p class="text-gray-600">
+                        Compare the features and specifications of Smartphone A and Smartphone B.
+                    </p>
+                </div>
+                <div class="card bg-white p-6 rounded-lg shadow">
+                    <img alt="Comparison between two laptops" class="w-full h-40 object-cover mb-4" height="200"
+                        src="https://storage.googleapis.com/a1aa/image/CVv-k8wA6fSi3ze7JNSVKLoXaf4KWF5NWh6wfbfUvoc.jpg"
+                        width="300" />
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">
+                        Laptop A vs Laptop B
+                    </h3>
+                    <p class="text-gray-600">
+                        Compare the features and specifications of Laptop A and Laptop B.
+                    </p>
+                </div>
+            </div>
+            <div class="column">
+                <div class="card bg-white p-6 rounded-lg shadow">
+                    <img alt="Comparison between two headphones" class="w-full h-40 object-cover mb-4" height="200"
+                        src="https://storage.googleapis.com/a1aa/image/2H_6b7gOMOet6_jQug8Xjg4ZPMly_Rsm77bRoUAcMZ0.jpg"
+                        width="300" />
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">
+                        Headphone A vs Headphone B
+                    </h3>
+                    <p class="text-gray-600">
+                        Compare the features and specifications of Headphone A and Headphone B.
+                    </p>
+                </div>
+                <div class="card bg-white p-6 rounded-lg shadow">
+                    <img alt="Comparison between two smartwatches" class="w-full h-40 object-cover mb-4" height="200"
+                        src="https://storage.googleapis.com/a1aa/image/KySXYn6_SGDSta8LeCmnRx0YL_ifiTOC-W7zx_8Lvjk.jpg"
+                        width="300" />
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">
+                        Smartwatch A vs Smartwatch B
+                    </h3>
+                    <p class="text-gray-600">
+                        Compare the features and specifications of Smartwatch A and Smartwatch B.
+                    </p>
+                </div>
+            </div>
+            <div class="column">
+                <div class="card bg-white p-6 rounded-lg shadow">
+                    <img alt="Comparison between two cameras" class="w-full h-40 object-cover mb-4" height="200"
+                        src="https://storage.googleapis.com/a1aa/image/x8T6eax0gOpI8u3wRl-9NtLmmGam9Y03l9zH2_5FwWY.jpg"
+                        width="300" />
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">
+                        Camera A vs Camera B
+                    </h3>
+                    <p class="text-gray-600">
+                        Compare the features and specifications of Camera A and Camera B.
+                    </p>
+                </div>
+                <div class="card bg-white p-6 rounded-lg shadow">
+                    <img alt="Comparison between two tablets" class="w-full h-40 object-cover mb-4" height="200"
+                        src="https://storage.googleapis.com/a1aa/image/TUcKTz5CzlwqtVF3PfUZo-6uceRo3AGrLcakoYiATbU.jpg"
+                        width="300" />
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">
+                        Tablet A vs Tablet B
+                    </h3>
+                    <p class="text-gray-600">
+                        Compare the features and specifications of Tablet A and Tablet B.
+                    </p>
+                </div>
+            </div>
+            <div class="column">
+                <div class="card bg-white p-6 rounded-lg shadow">
+                    <img alt="Comparison between two headphones" class="w-full h-40 object-cover mb-4" height="200"
+                        src="https://storage.googleapis.com/a1aa/image/2H_6b7gOMOet6_jQug8Xjg4ZPMly_Rsm77bRoUAcMZ0.jpg"
+                        width="300" />
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">
+                        Headphone A vs Headphone B
+                    </h3>
+                    <p class="text-gray-600">
+                        Compare the features and specifications of Headphone A and Headphone B.
+                    </p>
+                </div>
+                <div class="card bg-white p-6 rounded-lg shadow">
+                    <img alt="Comparison between two smartwatches" class="w-full h-40 object-cover mb-4" height="200"
+                        src="https://storage.googleapis.com/a1aa/image/KySXYn6_SGDSta8LeCmnRx0YL_ifiTOC-W7zx_8Lvjk.jpg"
+                        width="300" />
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">
+                        Smartwatch A vs Smartwatch B
+                    </h3>
+                    <p class="text-gray-600">
+                        Compare the features and specifications of Smartwatch A and Smartwatch B.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Text Section -->
+<section class="flex flex-col max-w-[60rem] mt-[5rem] mb-[8rem] ml-auto mr-auto relative items-center">
+    <h2 class="text-black-50 text-[3rem] font-bold tracking-tight mb-[-3rem] p-0 text-center whitespace-pre-wrap">Your Ultimate Guide to Making Smarter Choices Product Analyzer.
+    </h2>
+    <p class="text-black text-[1.1rem] font-stretch-normal non-italic font-normal tracking-normal  text-center w-[90%]">
+        We are a passionate team of unbiased experts, dedicated to simplifying your decisions. No fluff, no bias—just
+        clear, data-driven comparisons to help you find the best.
+    </p>
+    <div class="text_sec_btns items-center flex flex-row justify-between mt-[2.5rem] text-center">
+        <a class="bg-[#531889] rounded-full text-white text-[.875rem] font-semibold pt-[.8rem] pb-[.8rem] pl-[2rem] pr-[2rem] no-underline category"
+            href="#">See all categories</a>
+        <a class="text-[.875rem] font-semibold text-center no-underline pl-[2rem] flex flex-row items-center" href="#">
+            How we work
+            <span class="pl-1 pb-[0.5]">→</span>
+        </a>
+    </div>
+</section>
+
+{% endblock %}

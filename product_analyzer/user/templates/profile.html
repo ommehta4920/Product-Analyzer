@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+
+{% block title %}
+Product Analyzer | Category
+{% endblock %}
+
+{% block content %}
+
+{% load static %}
+
+<section class="category-hero-section flex items-center justify-center text-center text-white relative">
+    <h1 class="text-6xl font-bold uppercase" style="color: white;">
+        Profile
+    </h1>
+</section>
+
+<div class="col-md-9 w-100" style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding: 2% 0;">
+    <div class="card w-[60%]">
+        <div class="card-header p-2">
+            <ul class="nav nav-pills">
+                <li class="nav-item"><a class="nav-link active" href="#profile" data-toggle="tab">Profile</a></li>
+                <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Track Price</a></li>
+                <li class="nav-item"><a class="nav-link" href="#history" data-toggle="tab">History</a></li>
+                <li class="nav-item"><a class="nav-link" href="#edit" data-toggle="tab">Change Password</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}" style="color: red;">Logout</a></li>
+            </ul>
+        </div>
+        <div class="card-body">
+            <div class="tab-content">
+                <div class="active tab-pane" id="profile">
+                    <div style="display: flex; flex-direction: column;">
+                        <h1 style="text-align: center; font-size: 22px;"><strong>Welcome, {{ user_data.user_name }}!</strong></h1>
+                        <div class="card-body" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                            <form id="user-form" method="POST" action="{% url 'profile' %}" style="width: 80%;">
+                                {% csrf_token %}                               
+                                <div class="form-group">
+                                    <label for="inputName"><strong>Name</strong></label>
+                                    <input class="form-control" id="inputName" name="name" placeholder="Name" type="text" value="{{ user_data.user_name }}" readonly>
+                                </div>
+                        
+                                <div class="form-group">
+                                    <label for="inputEmail"><strong>Email</strong></label>
+                                    <input class="form-control" id="inputEmail" name="email" placeholder="Email" type="email" value="{{ user_data.user_email }}" readonly>
+                                </div>
+                        
+                                <div class="form-group" style="display: flex; flex-direction: row; justify-content: space-evenly; align-items: center; margin-top: 15px;">
+                                    <button type="button" class="btn btn-danger" id="editBtn" onclick="toggleEdit()">EDIT</button>
+                                    <button type="submit" class="btn btn-success d-none" id="saveBtn">SAVE</button>
+                                    <button type="button" class="btn btn-secondary d-none" id="cancelBtn" onclick="cancelEdit()">CANCEL</button>
+                                </div>
+                            </form>
+                        </div>
+                        <script>
+                        function toggleEdit() {
+                            document.getElementById("inputName").removeAttribute("readonly");
+                            document.getElementById("inputEmail").removeAttribute("readonly");
+                    
+                            document.getElementById("editBtn").classList.add("d-none");
+                            document.getElementById("saveBtn").classList.remove("d-none");
+                            document.getElementById("cancelBtn").classList.remove("d-none");
+                        }
+                    
+                        function cancelEdit() {
+                            location.reload();  // Refresh page to discard changes
+                        }
+                        </script>
+                    </div>
+                </div>
+                <div class=" tab-pane" id="history">
+                    <!-- user history content goes here -->
+                    <p>Your history content goes here.</p>
+                </div>
+                <div class="tab-pane" id="settings">
+                    <form class="form-horizontal">
+                        <div class="form-group row">
+                            <label for="inputProductName" class="col-sm-2 col-form-label">Product Name</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="inputProductName" placeholder="Product">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="inputCurrentPrice" class="col-sm-2 col-form-label">Current Price</label>
+                            <div class="col-sm-10">
+                                <input type="number" class="form-control" id="inputCurrentPrice" placeholder="Enter price">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="inputDesiredPrice" class="col-sm-2 col-form-label">Desired Price</label>
+                            <div class="col-sm-10">
+                                <input type="number" class="form-control" id="inputDesiredPrice" placeholder="Enter price">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="offset-sm-2 col-sm-10">
+                                <button type="submit" class="btn btn-danger">SEARCH</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="tab-pane" id="edit">
+                    <form class="form-horizontal" method="POST" >
+                        {% csrf_token %}
+                        <div class="form-group row">
+                            <label for="currentPassword" class="col-sm-2 col-form-label">Current Password</label>
+                            <div class="col-sm-10">
+                                <input type="password" class="form-control" id="currentPassword" name="current_password" placeholder="Current Password" required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="newPassword" class="col-sm-2 col-form-label">New Password</label>
+                            <div class="col-sm-10">
+                                <input type="password" class="form-control" id="newPassword" name="new_password" placeholder="New Password" required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="confirmPassword" class="col-sm-2 col-form-label">Confirm Password</label>
+                            <div class="col-sm-10">
+                                <input type="password" class="form-control" id="confirmPassword" name="confirm_password" placeholder="Confirm Password" required>
+                            </div>
+                        </div>
+                
+                        <div class="form-group row">
+                            <div class="offset-sm-2 col-sm-10">
+                                <button type="submit" class="btn btn-danger">UPDATE</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- jQuery -->
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <!-- Bootstrap 4 -->
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+            <!-- AdminLTE App -->
+            <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.1.0/dist/js/adminlte.min.js"></script>
+            <!-- AdminLTE for demo purposes -->
+            <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.1.0/dist/js/demo.js"></script>
+                
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+{% if messages %}
+<div id="message-container" class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
+    {% for message in messages %}
+    <div class="alert
+                {% if 'success' in message.tags %}alert-success
+                {% elif 'error' in message.tags %}alert-danger
+                {% elif 'warning' in message.tags %}alert-warning
+                {% elif 'info' in message.tags %}alert-info
+                {% else %}alert-secondary{% endif %} 
+                alert-dismissible fade show " role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<script>
+    setTimeout(function () {
+        var alerts = document.querySelectorAll('.alert');
+        alerts.forEach(function (alert) {
+            var bsAlert = new bootstrap.Alert(alert);
+            bsAlert.close();
+        });
+    }, 3000);
+
+    function toggleEdit() {
+        document.getElementById("inputName").removeAttribute("readonly");
+        document.getElementById("inputEmail").removeAttribute("readonly");
+
+        document.getElementById("editBtn").classList.add("d-none");
+        document.getElementById("saveBtn").classList.remove("d-none");
+        document.getElementById("cancelBtn").classList.remove("d-none");
+    }
+
+    function cancelEdit() {
+        location.reload();  // Refresh page to discard changes
+    }
+</script>
+{% endblock %}
