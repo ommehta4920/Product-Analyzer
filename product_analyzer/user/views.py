@@ -63,31 +63,6 @@ class ProductComparisonPage(APIView):
             except categories.DoesNotExist:
                 return HttpResponseNotFound(JsonResponse({'error': 'category not found.'}))
         return render(request, "product_comparison.html", { "category_data": category_data, 'products_detail': []})
-
-class ScraperPage(APIView):
-    def get(self,request):
-        return render(request, "search.html")
-    
-    def post(self, request):
-        query = request.POST.get("query", "").strip()
-        
-        if not query:
-            messages.error(request, "Please Provide Input")
-            return redirect("/scraper")
-        
-        project_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../my_scraper")
-
-        # Set environment variables for Django
-        env = os.environ.copy()
-        env["DJANGO_SETTINGS_MODULE"] = "product_analyzer.settings"
-        env["PYTHONPATH"] = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        
-        try:
-            subprocess.run(["scrapy", "crawl", "my_spider", "-a", f"query={query}"], cwd=project_path, env=env, check=True)
-            messages.success(request, f"Scraping started for: {query}")
-        except subprocess.CalledProcessError as e:
-            messages.error(request, f"Scrapy encountered an error: {e}")
-        return redirect("/scraper")
         
 class SignInPage(APIView):
     def get(self, request):

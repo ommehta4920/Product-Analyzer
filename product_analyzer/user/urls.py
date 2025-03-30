@@ -15,7 +15,7 @@ urlpatterns = [
     path('comparison/<int:c_id>/<str:p_id>/', ProductComparisonPage.as_view(), name='product-comparison-page'),
     path('signin/', SignInPage.as_view(), name='signin-page'),
     path('signup/', SignUpPage.as_view(), name='signup-page'),
-    path('scraper/', ScraperPage.as_view(), name='scraper-page'),
+    # path('scraper/', ScraperPage.as_view(), name='scraper-page'),
     path('profile/', ProfilePage.as_view(), name='profile'),
     path('logout/', views.logout_user, name='logout'),
 ]

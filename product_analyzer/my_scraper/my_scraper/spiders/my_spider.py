@@ -129,7 +129,7 @@ class MySpider(scrapy.Spider):
                 p_rating = response.css('.Y1HWO0>.XQDdHH::text').get()
                 if p_rating:
                     item["p_rating"] = p_rating
-                elif p_rating is None or p_rating is "none":
+                elif p_rating is None or p_rating == "none":
                     item["p_rating"] = "0"
                 else:
                     item["p_rating"] = "0"
@@ -184,9 +184,7 @@ class MySpider(scrapy.Spider):
                 
                 item["w_name"] = "Flipkart"
                 
-                
-                yield item
-                
+                yield item   
             except Exception as e:
                 print(f"Error: {e}")
         
@@ -262,7 +260,7 @@ class MySpider(scrapy.Spider):
                 # print(f"Ratings: {ratings}")
                 if ratings is not None:
                     item["p_rating"] = ratings.strip()
-                elif ratings is None or ratings is "none":
+                elif ratings is None or ratings == "none":
                     item["p_rating"] = "0"
                 else:
                     item["p_rating"] = "0"

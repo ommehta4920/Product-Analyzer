@@ -33,7 +33,10 @@ CATEGORY_MAPPING = {
 
 class DjangoPipeline:
     async def process_item(self, item, spider):
-        await sync_to_async(self.save_to_db)(item)
+        if spider.name == "my_spider":
+            await sync_to_async(self.save_to_db, thread_sensitive=True)(item)
+        else:
+            await sync_to_async(self.update_product_data, thread_sensitive=True)(item)
         return item
     
     def save_to_db(self, item):
@@ -118,5 +121,52 @@ class DjangoPipeline:
         product.product_price = product_price_data
         product.save()
         print(f"Updated price for {product.product_name}: {scraped_date} -> {price}")
+            
+        return item
+    
+    def update_product_data(self, item):
+        price = item["p_price"]
+        scraped_date = datetime.today().strftime('%Y-%m-%d')
+        
+        if item["p_rating"] is None:
+            item["p_rating"] = 0
+        
+        try:
+            product = products.objects.get(product_id=item['p_id'])
+            product_price_data = product.product_price
+        except products.DoesNotExist:
+            product_price_data = {}
+            product = products(
+                product_id = item['p_id'],
+                product_price = product_price_data,
+                product_ratings = item['p_rating'],
+                currency = item['p_currency'],
+                is_available = item['p_available'],
+            )
+        
+        if not isinstance(product_price_data, dict):
+            product_price_data = {}
+        
+        product_price_data = product.product_price
+        
+        if scraped_date in product_price_data:
+            if product_price_data[scraped_date] == price:
+                print("-----------------------------------------------------------------")
+                print(f"No price change for {product.product_name}. Skipping update.")
+                return item
+            else:
+                print("-----------------------------------------------------------------")
+                print(f"Updating price for {product.product_name} on {scraped_date}: {product_price_data[scraped_date]} -> {price}")
+                # product_price_data[scraped_date] = price
+        else:
+            print("-----------------------------------------------------------------")
+            print(f"Appending new price entry for {product.product_name} on {scraped_date}.")
+        
+        product_price_data[scraped_date] = price
+            
+        product.product_price = product_price_data
+        product.save()
+        print("-----------------------------------------------------------------")
+        print(f"Final price record for {product.product_name}: {scraped_date} -> {price}")
             
         return item

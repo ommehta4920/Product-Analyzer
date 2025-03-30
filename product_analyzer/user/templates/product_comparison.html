@@ -228,7 +228,7 @@ Product Analyzer | Comparison
 
                 os: productData["Operating System"]?.["Operating System"] || productData["Os & Processor Features"]?.["Operating System"] || productData["Operating System"] || productData["OS"] || productData["Smart Tv Features"]?.["Operating System"] || "N/A",
 
-                ram: productData["Processor And Memory Features"]?.["RAM"] || productData["Memory & Storage Features"]?.["RAM"] || productData["Ram Memory Installed Size"] || productData["RAM"] || productData["RAM Size"] || productData["Smart Tv Features"]?.["Ram Capacity"] || "N/A",
+                ram: productData["Processor And Memory Features"]?.["RAM"   ] || productData["Memory & Storage Features"]?.["RAM"] || productData["Ram Memory Installed Size"] || productData["RAM"] || productData["RAM Size"] || productData["Smart Tv Features"]?.["Ram Capacity"] || "N/A",
 
                 size: productData["Display And Audio Features"]?.["Screen Size"] || productData["Display Features"]?.["Display Size"] || productData["General"]?.["Display Size"] || productData["Standing screen display size"] || productData["Product Dimensions"[0]] || "N/A",
 
