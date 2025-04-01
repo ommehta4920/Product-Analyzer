@@ -21,94 +21,48 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <style>
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #f9f9f9;
-            min-width: 160px;
-            max-height: 200px;
-            overflow-y: auto;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            z-index: 1;
-        }
-        .dropdown-content a {
-            color: black;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-        }
-        .dropdown-content a:hover {background-color: #f1f1f1}
-        .show {display: block;}
-
-        #comparison-section {
-            display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-            gap: 10px;  
-            justify-content: center;
-            padding: 20px;
-            /* overflow: hidden; */
-        }
-        .comparison-card {
-            flex: 1;
-            min-width: 250px;
-            max-width: 300px;
-            background: white;
-            padding: 16px;
-            border-radius: 8px;
-            box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-    </style>
 </head>
 
 <body class="bg-gray-100 select-none font-roboto bg-gray-100">
     <!-- Header -->
-    <header class="header fixed w-full z-10 top-0 left-0">
-        <div class="container mx-auto px-4 py-4 flex justify-between align-items-center items-center text-lg">
-            <div class="flex items-center space-x-4 ml-20">
-                <!-- <div class="text-2xl font-bold text-white">
-                    
-                </div> -->
-                <nav class="space-x-6 flex items-center text-base">
-                    <a class=" text-2xl font-bold text-white ml-4 transition-all duration-300 tracking-tighter"
+    <header class="header fixed w-full z-10 top-0 left-0 mx-auto px-4 py-4 flex justify-between align-items-center items-center text-lg">
+            <div class="items-center space-x-4 ml-20 w-100">
+                <nav class="space-x-6 flex items-center text-base w-100">
+                    <div class="main-nav w-75">
+                        <a class=" text-2xl font-bold text-white ml-4 transition-all duration-300 tracking-tighter"
                         href="/">
-                        <h1>Product Analyzer</h1>
-                    </a>
-                    <a class="header-link text-white mt-1 hover:underline underline-offset-4 transition-all duration-300 uppercase"
-                        href="/comparison">
-                        Comparisons
-                    </a>
-                    <a class="header-link text-white mt-1 hover:underline underline-offset-4 transition-all duration-300 uppercase"
-                        href="/category">
-                        Categories
-                    </a>
-                    <a class="header-link text-white mt-1 hover:underline underline-offset-4 transition-all duration-300 uppercase"
-                        href="#">
-                        About Us
-                    </a>
+                            <h1>Product Analyzer</h1>
+                        </a>
+                        <a class="header-link text-white mt-1 hover:underline underline-offset-4 transition-all duration-300 uppercase"
+                            href="/comparison">
+                            Comparisons
+                        </a>
+                        <a class="header-link text-white mt-1 hover:underline underline-offset-4 transition-all duration-300 uppercase"
+                            href="/category">
+                            Categories
+                        </a>
+                        <a class="header-link text-white mt-1 hover:underline underline-offset-4 transition-all duration-300 uppercase"
+                            href="#">
+                            About Us
+                        </a>
+                    </div>
+                    <div class="login mr-20 w-25">
+                        {% if request.session.user_id %}
+                            <!-- If user is logged in, show profile and logout -->
+                            <a class="text-white header-link mt-1 transition-all duration-300 uppercase mr-4" href="/profile">
+                                <i class="fas fa-user text-white text-l"></i> Profile
+                            </a>
+                            <a class="text-white header-link mt-1 transition-all duration-300 uppercase mr-4" href="/logout">
+                                <i class="fas fa-sign-out-alt text-white text-l"></i> Logout
+                            </a>
+                        {% else %}
+                            <!-- If user is not logged in, show login button -->
+                            <a class="text-white text-xl" href="/signin">
+                                <i class="fas fa-user"></i> Login
+                            </a>
+                        {% endif %}
+                    </div>
                 </nav>
-            </div>
-            <div class="login mr-20">
-                {% if request.session.user_id %}
-                    <!-- If user is logged in, show profile and logout -->
-                    <a class="text-white text-xl mr-4" href="/profile">
-                        <i class="fas fa-user"></i> Profile
-                    </a>
-                    <a class="text-white text-xl" href="/logout">
-                        <i class="fas fa-sign-out-alt"></i> Logout
-                    </a>
-                {% else %}
-                    <!-- If user is not logged in, show login button -->
-                    <a class="text-white text-xl" href="/signin">
-                        <i class="fas fa-user"></i> Login
-                    </a>
-                {% endif %}
-            </div>
         </div>
     </header>
 
