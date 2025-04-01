@@ -110,17 +110,23 @@ class DjangoPipeline:
         
         if scraped_date in product_price_data:
             if product_price_data[scraped_date] == price:
+                print("-----------------------------------------------------------------")
                 print(f"No price change for {product.product_name}. Skipping update.")
                 return item
-            print(f"Updating price for {product.product_name} on {scraped_date}")
-            product_price_data[scraped_date] = price
+            else:
+                print("-----------------------------------------------------------------")
+                print(f"Updating price for {product.product_name} on {scraped_date}: {product_price_data[scraped_date]} -> {price}")
+                # product_price_data[scraped_date] = price
         else:
-            print(f"Appending new price entry for {product.product_name}.")
-            product_price_data[scraped_date] = price
+            print("-----------------------------------------------------------------")
+            print(f"Appending new price entry for {product.product_name} on {scraped_date}.")
+        
+        product_price_data[scraped_date] = price
             
         product.product_price = product_price_data
         product.save()
-        print(f"Updated price for {product.product_name}: {scraped_date} -> {price}")
+        print("-----------------------------------------------------------------")
+        print(f"Final price record for {product.product_name}: {scraped_date} -> {price}")
             
         return item
     
