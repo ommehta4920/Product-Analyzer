@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 import os
+import psycopg2
+from django.conf import settings
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -88,6 +90,27 @@ DATABASES = {
     }
 }
 
+PASSWORDS = ['postgres', 'admin']
+SUCCESS = False
+
+for password in PASSWORDS:
+    try:
+        conn = psycopg2.connect(
+            dbname=settings.DATABASES['default']['NAME'],
+            user=settings.DATABASES['default']['USER'],
+            password=password,
+            host=settings.DATABASES['default']['HOST'],
+            port=settings.DATABASES['default']['PORT'],
+        )
+        print("Connected successfully!")
+        settings.DATABASES['default']['PASSWORD'] = password  # Set working password
+        SUCCESS = True
+        break
+    except psycopg2.OperationalError:
+        print(f"Failed with password: {password}")
+
+if not SUCCESS:
+    raise Exception("Could not connect with any provided passwords")
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators

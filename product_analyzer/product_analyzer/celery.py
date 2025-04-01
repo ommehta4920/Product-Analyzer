@@ -18,7 +18,7 @@ app.config_from_object(settings, namespace='CELERY')
 app.conf.beat_schedule = {
     'Category-Scrapper': {
         'task': 'user.tasks.categoryScrapper',
-        'schedule': crontab(hour="11", minute="43"),
+        'schedule': crontab(hour="12", minute="06"),
     },
     'Product-Scrapper': {
         'task': 'user.tasks.productScrapper',

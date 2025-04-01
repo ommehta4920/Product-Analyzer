@@ -47,11 +47,11 @@ class DjangoPipeline:
             }
         )
         
-        scraped_category = str(item["c_name"]).lower()
-        print(f"Scraped_Category: {scraped_category}")
-        standardized_category = CATEGORY_MAPPING.get(scraped_category, scraped_category)
+        # scraped_category = 
+        # print(f"Scraped_Category: {scraped_category}")
+        # standardized_category = CATEGORY_MAPPING.get(scraped_category, scraped_category)
         category, created = categories.objects.update_or_create(
-            category_name = standardized_category,
+            category_name = str(item["c_name"]).lower(),
         )
         
         if created:

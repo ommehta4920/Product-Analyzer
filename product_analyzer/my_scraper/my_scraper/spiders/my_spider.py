@@ -106,12 +106,13 @@ class MySpider(scrapy.Spider):
                 # print(f"Title: {title}")
                 
                 # -------------------------------  product category -------------------------------------
-                category_container = response.css("._7dPnhA")
-                c_name = category_container.xpath('//div[3]/a/text()').get()
-                if c_name is not None:
-                    item["c_name"] = c_name
-                else:
-                    item["c_name"] = self.query
+                # category_container = response.css("._7dPnhA")
+                # c_name = category_container.xpath('//div[3]/a/text()').get()
+                # if c_name is not None:
+                #     item["c_name"] = c_name
+                # else:
+                #     item["c_name"] = self.query
+                item["c_name"] = self.query
                 # print(f"Product Category: {category}")
             
                 # -------------------------------  product price -------------------------------------
@@ -222,18 +223,19 @@ class MySpider(scrapy.Spider):
                 # print(f"Product Title: {title}")
                 
                 # -------------------------------  product category -------------------------------------
-                if self.query == 'laptop':
-                    c_name = response.xpath('//*[@id="wayfinding-breadcrumbs_feature_div"]/ul/li[3]/span/a/text()').get()
-                    if c_name == 'laptops' or c_name == 'Laptops':
-                        item['c_name'] = c_name
-                    elif c_name is None or c_name == 'none' or c_name == 'None' or c_name == '':
-                        item['c_name'] = 'laptops'
-                else:
-                    c_name = response.xpath('//*[@id="wayfinding-breadcrumbs_feature_div"]/ul/li[7]/span/a/text()').get()
-                    if c_name is None or c_name == 'none':
-                        item['c_name'] = self.query
-                    else:
-                        item['c_name'] = c_name
+                # if self.query == 'laptop':
+                #     c_name = response.xpath('//*[@id="wayfinding-breadcrumbs_feature_div"]/ul/li[3]/span/a/text()').get()
+                #     if c_name == 'laptops' or c_name == 'Laptops':
+                #         item['c_name'] = c_name
+                #     elif c_name is None or c_name == 'none' or c_name == 'None' or c_name == '':
+                #         item['c_name'] = 'laptops'
+                # else:
+                #     c_name = response.xpath('//*[@id="wayfinding-breadcrumbs_feature_div"]/ul/li[7]/span/a/text()').get()
+                #     if c_name is None or c_name == 'none':
+                #         item['c_name'] = self.query
+                #     else:
+                #         item['c_name'] = c_name
+                item["c_name"] = self.query
                 # print(f"Product Category: {category}")
             
                 # -------------------------------  product price -------------------------------------
