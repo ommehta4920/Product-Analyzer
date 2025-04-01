@@ -12,6 +12,9 @@ Product Analyzer | Category
     <h1 class="text-6xl font-bold uppercase" style="color: white;">
         Profile
     </h1>
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 </section>
 
 <div class="col-md-9 w-100" style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding: 2% 0;">
@@ -22,7 +25,7 @@ Product Analyzer | Category
                 <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Track Price</a></li>
                 <li class="nav-item"><a class="nav-link" href="#history" data-toggle="tab">History</a></li>
                 <li class="nav-item"><a class="nav-link" href="#edit" data-toggle="tab">Change Password</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}" style="color: red;">Logout</a></li>
+                {% comment %} <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}" style="color: red;">Logout</a></li> {% endcomment %}
             </ul>
         </div>
         <div class="card-body">
@@ -100,33 +103,41 @@ Product Analyzer | Category
                 </div>
 
                 <div class="tab-pane" id="edit">
-                    <form class="form-horizontal" method="POST" >
+                    <form method="POST" action="{% url 'profile' %}">
                         {% csrf_token %}
                         <div class="form-group row">
                             <label for="currentPassword" class="col-sm-2 col-form-label">Current Password</label>
                             <div class="col-sm-10">
-                                <input type="password" class="form-control" id="currentPassword" name="current_password" placeholder="Current Password" required>
+                                <input type="password" class="form-control" id="currentPassword" name="current_password" required>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="newPassword" class="col-sm-2 col-form-label">New Password</label>
                             <div class="col-sm-10">
-                                <input type="password" class="form-control" id="newPassword" name="new_password" placeholder="New Password" required>
+                                <input type="password" class="form-control" id="newPassword" name="new_password" required>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="confirmPassword" class="col-sm-2 col-form-label">Confirm Password</label>
                             <div class="col-sm-10">
-                                <input type="password" class="form-control" id="confirmPassword" name="confirm_password" placeholder="Confirm Password" required>
+                                <input type="password" class="form-control" id="confirmPassword" name="confirm_password" required>
                             </div>
                         </div>
-                
                         <div class="form-group row">
                             <div class="offset-sm-2 col-sm-10">
                                 <button type="submit" class="btn btn-danger">UPDATE</button>
                             </div>
                         </div>
                     </form>
+                    
+                    <!-- Display Django Messages -->
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
+                    
+                    
                 </div>
                 <!-- jQuery -->
             <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
