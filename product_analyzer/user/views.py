@@ -3,8 +3,8 @@ from django.http import HttpResponseNotFound, JsonResponse
 from rest_framework.views import APIView
 from .models import *
 from django.contrib import messages
-import subprocess
-import os
+# import subprocess
+# import os
 import logging
 
 class HomePage(APIView):
