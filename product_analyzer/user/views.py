@@ -3,9 +3,14 @@ from django.http import HttpResponseNotFound, JsonResponse
 from rest_framework.views import APIView
 from .models import *
 from django.contrib import messages
-# import subprocess
-# import os
+import subprocess
+import os
 import logging
+from django.contrib.auth.hashers import check_password, make_password
+from django.contrib.auth import update_session_auth_hash
+from django.views import View
+from .models import user_details
+from .models import products
 
 class HomePage(APIView):
     def get(self, request):
@@ -43,7 +48,7 @@ class ProductDetailsPage(APIView):
         context = {"chartLabels": labels, "chartValues": [int(value.replace(',', '')) for value in values], "c_name": c_name, "product_data": product_data, "last_price": last_price, "category": category}
         return render(request, "product_detail.html", context)
         
-       
+
 class ProductComparisonPage(APIView):
     def get(self, request, c_id = None):
         category_data = categories.objects.all()
@@ -100,28 +105,57 @@ class SignUpPage(APIView):
         user.save()
         return redirect("/signin")
     
-class ProfilePage(APIView):
+class ProfilePage(View):
     def get(self, request):
         userid = request.session.get("user_id")
         if not userid:
             return redirect("/signin")
-        else:
-            user_data = user_details.objects.get(user_id = userid)
-        
-        return render(request, 'profile.html', {"user_data": user_data})
+
+        user_data = user_details.objects.get(user_id=userid)
+
+        response = render(request, 'profile.html', {"user_data": user_data})
+        response['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+        response['Pragma'] = 'no-cache'
+        response['Expires'] = '0'
+        return response
 
     def post(self, request):
         user_id = request.session.get("user_id")
-
         if not user_id:
             return redirect("/signin")
 
-        # Get updated data from form
+        user = user_details.objects.get(user_id=user_id)
+
+        # Check if password change request
+        if "current_password" in request.POST:
+            current_password = request.POST.get("current_password")
+            new_password = request.POST.get("new_password")
+            confirm_password = request.POST.get("confirm_password")
+
+            # Check if the current password is correct
+            if not check_password(current_password, user.user_password):
+                messages.error(request, "Current password is incorrect.")
+                return redirect("/profile")
+
+            # Ensure new passwords match
+            if new_password != confirm_password:
+                messages.error(request, "New password and Confirm password do not match.")
+                return redirect("/profile")
+
+            # Hash and update the new password
+            user.user_password = make_password(new_password)
+            user.save()
+
+            # Ensure user stays logged in after password change
+            update_session_auth_hash(request, user)
+
+            messages.success(request, "Your password has been successfully updated.")
+            return redirect("/profile")
+
+        # Otherwise, update profile details
         name = request.POST.get("name")
         email = request.POST.get("email")
 
-        # Update user details in the database
-        user = user_details.objects.get(user_id=user_id)
         user.user_name = name
         user.user_email = email
         user.save()
@@ -136,3 +170,40 @@ class ProfilePage(APIView):
 def logout_user(request):
     request.session.flush()
     return redirect("/")
+
+class AboutUs(APIView):
+    def get(self, request):
+        return render(request, "aboutus.html")
+    
+def search_suggestions(request):
+    query = request.GET.get("query", "").strip()
+    if query:
+        product_results = products.objects.filter(product_name__icontains=query)[:5]
+        suggestions = [product.product_name for product in product_results]
+    else:
+        suggestions = []
+    
+    return JsonResponse(suggestions, safe=False)
+
+def product_list(request):
+    query = request.GET.get("query", "").strip()  # Get search query
+    filtered_products = products.objects.filter(product_name__icontains=query) if query else products.objects.all()
+
+    return render(request, "products.html", {"products": filtered_products, "query": query})
+
+def search_results(request):
+    query = request.GET.get('query', '').strip()
+    
+    if query:
+        products_list = products.objects.filter(product_name__icontains=query)
+
+        # Filter out products that don't have a valid category_id
+        products_list = [p for p in products_list if p.category_id]
+    else:   
+        products_list = []
+
+    return render(request, 'products_list.html', {
+        'products': products_list,
+        'query': query,
+    })
+

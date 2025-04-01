@@ -18,6 +18,11 @@ urlpatterns = [
     # path('scraper/', ScraperPage.as_view(), name='scraper-page'),
     path('profile/', ProfilePage.as_view(), name='profile'),
     path('logout/', views.logout_user, name='logout'),
+    path('aboutus/', AboutUs.as_view(), name='aboutus'),
+    path("search-suggestions/", search_suggestions, name="search-suggestions"),
+    path('products/', product_list, name='product-list'),
+    path("search-results/", search_results, name="search-results"),
+    # path('change-password/', change_password, name='change_password'),
 ]
 
 if settings.DEBUG:
