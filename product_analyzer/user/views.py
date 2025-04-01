@@ -133,7 +133,7 @@ class ProfilePage(View):
             confirm_password = request.POST.get("confirm_password")
 
             # Check if the current password is correct
-            if not check_password(current_password, user.user_password):
+            if  current_password !=user.user_passwd:
                 messages.error(request, "Current password is incorrect.")
                 return redirect("/profile")
 
@@ -143,7 +143,7 @@ class ProfilePage(View):
                 return redirect("/profile")
 
             # Hash and update the new password
-            user.user_password = make_password(new_password)
+            user.user_passwd = new_password
             user.save()
 
             # Ensure user stays logged in after password change
