@@ -94,10 +94,20 @@
                 </nav>
             </div>
             <div class="login mr-20">
-                <a class="text-white text-xl" href="/signin">
-                    <i class="fas fa-user">
-                    </i>
-                </a>
+                {% if request.session.user_id %}
+                    <!-- If user is logged in, show profile and logout -->
+                    <a class="text-white text-xl mr-4" href="/profile">
+                        <i class="fas fa-user"></i> Profile
+                    </a>
+                    <a class="text-white text-xl" href="/logout">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                {% else %}
+                    <!-- If user is not logged in, show login button -->
+                    <a class="text-white text-xl" href="/signin">
+                        <i class="fas fa-user"></i> Login
+                    </a>
+                {% endif %}
             </div>
         </div>
     </header>
