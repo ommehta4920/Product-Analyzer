@@ -1,16 +1,15 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponseNotFound, JsonResponse
+from django.http import HttpResponseNotFound, JsonResponse, HttpResponseRedirect
 from rest_framework.views import APIView
 from .models import *
 from django.contrib import messages
-import subprocess
-import os
 import logging
 from django.contrib.auth.hashers import check_password, make_password
-from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth import update_session_auth_hash, logout
 from django.views import View
 from .models import user_details
 from .models import products
+# from .services import trackPrice
 
 class HomePage(APIView):
     def get(self, request):
@@ -46,8 +45,61 @@ class ProductDetailsPage(APIView):
         labels = sorted(p_price.keys())
         values = (p_price[date] for date in labels)     
         context = {"chartLabels": labels, "chartValues": [int(value.replace(',', '')) for value in values], "c_name": c_name, "product_data": product_data, "last_price": last_price, "category": category}
-        return render(request, "product_detail.html", context)
         
+        return render(request, "product_detail.html", context)   
+    
+    def post(self, request, c_id, p_id):
+        category = get_object_or_404(categories, category_id=c_id)
+        c_name = category.category_name[:-1]
+        product_data = get_object_or_404(products, product_id=p_id)
+        
+        userId = request.session.get("user_id")
+        if not userId:
+            return JsonResponse({"error": "User not authenticated"}, status=403)
+        
+        user = get_object_or_404(user_details, user_id=userId)
+        
+        # Fetching Latest Price 
+        p_price = product_data.product_price
+        if p_price:
+            last_date = max(p_price.keys())  # Get the last date
+            last_price = p_price[last_date]  # Get the price for the last date
+        else:
+            last_price = "N/A"
+
+        # Get user input for desired price
+        desired_price = request.POST.get("desiredPrice")
+
+        if not desired_price:
+            return JsonResponse({"error": "Desired price is required"}, status=400)
+        
+        existing_tracking = price_track.objects.filter(
+            user_id = user,
+            product_id = product_data,
+            desired_price = desired_price,
+            tracking_status = '1'
+        ).exists()
+        
+        if existing_tracking:
+            messages.error(request, "You have already placed a tracking for this product with the same price.")
+            # return message
+        else:
+            tracking_entry = price_track.objects.create(
+                user_id= user,  # Retrieved from session
+                product_id=product_data,
+                category_id=category,
+                desired_price=desired_price,
+                last_price=last_price,
+                tracking_status='1'  # Active
+            )
+            
+            tracking_entry.save()
+            messages.success(request, 'Price tracking has been successfully saved!')
+        labels = sorted(p_price.keys())
+        values = (p_price[date] for date in labels)     
+        context = {"chartLabels": labels, "chartValues": [int(value.replace(',', '')) for value in values], "c_name": c_name, "product_data": product_data, "last_price": last_price, "category": category}
+        
+        return render(request, "product_detail.html", context)  
 
 class ProductComparisonPage(APIView):
     def get(self, request, c_id = None):
@@ -168,8 +220,10 @@ class ProfilePage(View):
         return redirect("/profile")
 
 def logout_user(request):
-    request.session.flush()
-    return redirect("/")
+    logout(request)
+    response = HttpResponseRedirect('/signin')
+    response.delete_cookie('sessionid')
+    return response
 
 class AboutUs(APIView):
     def get(self, request):

@@ -10,19 +10,16 @@ urlpatterns = [
     path('category/<int:c_id>/', ProductListPage.as_view(), name='products-list-page'),
     path('category/<int:c_id>/<str:p_id>/', ProductDetailsPage.as_view(), name='product-detail-page'),
     path('comparison/', ProductComparisonPage.as_view(), name='product-comparison-page'),
-
     path('comparison/<int:c_id>', ProductComparisonPage.as_view(), name='product-comparison-page-with-id'),
     path('comparison/<int:c_id>/<str:p_id>/', ProductComparisonPage.as_view(), name='product-comparison-page'),
     path('signin/', SignInPage.as_view(), name='signin-page'),
     path('signup/', SignUpPage.as_view(), name='signup-page'),
-    # path('scraper/', ScraperPage.as_view(), name='scraper-page'),
     path('profile/', ProfilePage.as_view(), name='profile'),
     path('logout/', views.logout_user, name='logout'),
     path('aboutus/', AboutUs.as_view(), name='aboutus'),
     path("search-suggestions/", search_suggestions, name="search-suggestions"),
     path('products/', product_list, name='product-list'),
     path("search-results/", search_results, name="search-results"),
-    # path('change-password/', change_password, name='change_password'),
 ]
 
 if settings.DEBUG:

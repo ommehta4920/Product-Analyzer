@@ -20,12 +20,11 @@ Product Analyzer | Category
 <div class="col-md-9 w-100" style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding: 2% 0;">
     <div class="card w-[60%]">
         <div class="card-header p-2">
-            <ul class="nav nav-pills">
+            <ul class="nav nav-pills" style="display: flex; flex-direction: row; justify-content: center; align-items: center;">
                 <li class="nav-item"><a class="nav-link active" href="#profile" data-toggle="tab">Profile</a></li>
-                <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Track Price</a></li>
-                <li class="nav-item"><a class="nav-link" href="#history" data-toggle="tab">History</a></li>
-                <li class="nav-item"><a class="nav-link" href="#edit" data-toggle="tab">Change Password</a></li>
-                {% comment %} <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}" style="color: red;">Logout</a></li> {% endcomment %}
+                <!-- <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Track Price</a></li> -->
+                <li class="nav-item"><a class="nav-link" href="#history" data-toggle="tab">Tracking History</a></li>
+                <!-- <li class="nav-item"><a class="nav-link" href="#edit" data-toggle="tab">Change Password</a></li>     -->
             </ul>
         </div>
         <div class="card-body">
@@ -36,14 +35,18 @@ Product Analyzer | Category
                         <div class="card-body" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
                             <form id="user-form" method="POST" action="{% url 'profile' %}" style="width: 80%;">
                                 {% csrf_token %}                               
-                                <div class="form-group">
-                                    <label for="inputName"><strong>Name</strong></label>
-                                    <input class="form-control" id="inputName" name="name" placeholder="Name" type="text" value="{{ user_data.user_name }}" readonly>
+                                <div class="form-group row w-100">
+                                    <label for="inputName" class="col-sm-2 col-form-label" style="width: 10%;">Name</label>
+                                    <div class="col-sm-10" style="width: 90%;">
+                                        <input class="form-control" id="inputName" name="name" placeholder="Name" type="text" value="{{ user_data.user_name }}" readonly>
+                                    </div>
                                 </div>
                         
-                                <div class="form-group">
-                                    <label for="inputEmail"><strong>Email</strong></label>
-                                    <input class="form-control" id="inputEmail" name="email" placeholder="Email" type="email" value="{{ user_data.user_email }}" readonly>
+                                <div class="form-group row w-100">
+                                    <label for="inputEmail" class="col-sm-2 col-form-label" style="width: 10%;">Email</label>
+                                    <div class="col-sm-10" style="width: 90%;">
+                                        <input class="form-control" id="inputEmail" name="email" placeholder="Email" type="email" value="{{ user_data.user_email }}" readonly>
+                                    </div>
                                 </div>
                         
                                 <div class="form-group" style="display: flex; flex-direction: row; justify-content: space-evenly; align-items: center; margin-top: 15px;">
@@ -73,36 +76,8 @@ Product Analyzer | Category
                     <!-- user history content goes here -->
                     <p>Your history content goes here.</p>
                 </div>
-                <div class="tab-pane" id="settings">
-                    <form class="form-horizontal">
-                        <div class="form-group row">
-                            <label for="inputProductName" class="col-sm-2 col-form-label">Product Name</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="inputProductName" placeholder="Product">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="inputCurrentPrice" class="col-sm-2 col-form-label">Current Price</label>
-                            <div class="col-sm-10">
-                                <input type="number" class="form-control" id="inputCurrentPrice" placeholder="Enter price">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="inputDesiredPrice" class="col-sm-2 col-form-label">Desired Price</label>
-                            <div class="col-sm-10">
-                                <input type="number" class="form-control" id="inputDesiredPrice" placeholder="Enter price">
-                            </div>
-                        </div>
 
-                        <div class="form-group row">
-                            <div class="offset-sm-2 col-sm-10">
-                                <button type="submit" class="btn btn-danger">SEARCH</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-
-                <div class="tab-pane" id="edit">
+                <!-- <div class="tab-pane" id="edit">
                     <form method="POST" action="{% url 'profile' %}">
                         {% csrf_token %}
                         <div class="form-group row">
@@ -128,26 +103,24 @@ Product Analyzer | Category
                                 <button type="submit" class="btn btn-danger">UPDATE</button>
                             </div>
                         </div>
-                    </form>
+                    </form> -->
                     
                     <!-- Display Django Messages -->
-                    {% if messages %}
+                    <!-- {% if messages %}
                         {% for message in messages %}
                             <div class="alert alert-{{ message.tags }}">{{ message }}</div>
                         {% endfor %}
                     {% endif %}
-                    
-                    
-                </div>
-                <!-- jQuery -->
+                </div> -->
+
+            <!-- jQuery -->
             <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
             <!-- Bootstrap 4 -->
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
             <!-- AdminLTE App -->
             <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.1.0/dist/js/adminlte.min.js"></script>
             <!-- AdminLTE for demo purposes -->
-            <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.1.0/dist/js/demo.js"></script>
-                
+            <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.1.0/dist/js/demo.js"></script> 
             </div>
         </div>
     </div>
