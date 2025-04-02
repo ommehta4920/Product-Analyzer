@@ -1,0 +1,11 @@
+# Ignore Python bytecode
+__pycache__/
+*.pyc
+
+# Ignore other common Python artifacts
+*.pyo
+*.pyd
+
+# Ignore virtual environments
+env/
+venv/
