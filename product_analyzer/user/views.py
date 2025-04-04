@@ -9,7 +9,10 @@ from django.contrib.auth import update_session_auth_hash, logout
 from django.views import View
 from .models import user_details
 from .models import products
-# from .services import trackPrice
+import sys
+import random
+from django.core.mail import send_mail
+from product_analyzer import settings
 
 class HomePage(APIView):
     def get(self, request):
@@ -123,7 +126,7 @@ class ProductComparisonPage(APIView):
         
 class SignInPage(APIView):
     def get(self, request):
-        return render(request, "signin.html")
+        return render(request, "login.html")
     
     def post(self, request):
         user_email = request.POST["user_email"]
@@ -144,11 +147,11 @@ class SignInPage(APIView):
             print("---------->>> Your Email or Password is incorrect!")
             messages.error(request, "Your Email isn't registered or Password is incorrect!")
             messages.info(request, "Please try again..")
-            return render(request, "signin.html", {"user_email": user_email})
+            return render(request, "login.html", {"user_email": user_email})
 
 class SignUpPage(APIView):
     def get(self, request):
-        return render(request, "signup.html")
+        return render(request, "register.html")
 
     def post(self, request):
         user_name = request.POST["user_name"]
@@ -161,19 +164,19 @@ class SignUpPage(APIView):
 
         if user_details.objects.filter(user_email=user_email).exists():
             messages.error(request, "Email already registered!")
-            return render(request, "signup.html", {"user_name": user_name, "user_passwd": user_passwd, "user_c_passwd": user_c_passwd})
+            return render(request, "register.html", {"user_name": user_name, "user_passwd": user_passwd, "user_c_passwd": user_c_passwd})
 
         if user_passwd != user_c_passwd:
             print("-------- Both password must be same..! --------")
             messages.info(request, "Both password must be same..!")
-            return render(request, "signup.html", {"user_name": user_name, "user_email": user_email})
+            return render(request, "register.html", {"user_name": user_name, "user_email": user_email})
 
         user = user_details(user_name=user_name, user_email=user_email, user_passwd=user_passwd)
 
         try:
             user.save()
             messages.success(request, "You are successfully registered...")
-            return render(request, "signin.html", {})
+            return render(request, "login.html", {})
 
         except:
             print("---------", sys.exc_info())
