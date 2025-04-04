@@ -1,6 +1,6 @@
 # Ignore Python bytecode
-__pycache__/
 *.pyc
+__pycache__/
 
 # Ignore other common Python artifacts
 *.pyo
