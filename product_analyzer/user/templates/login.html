@@ -1,84 +1,126 @@
 {% load static %}
-
 <html>
 
 <head>
-  <title>
-    Product Analyzer - SignIn
-  </title>
-  <script src="https://cdn.tailwindcss.com">
-  </script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="{% static 'css/style.css' %}" />
-  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/favicon.png' %}">
-  <style>
-    body {
-      background: radial-gradient(ellipse 120% 210% at 95% 0, #531889 10%, #000 70%);
-    }
-  </style>
+    <title>
+        Product Analyzer - SignIn
+    </title>
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/favicon.png' %}">
+    <style>
+        body {
+            background: radial-gradient(ellipse 120% 210% at 95% 0, #531889 10%, #000 70%);
+        }
+    </style>
+    <style>
+        .alert {
+            padding: 5px 30px 5px 30px;
+            margin: 5px 15px 25px 15px;
+            border: 3.5px solid transparent;
+            border-radius: 25px;
+            width: max-content;
+            justify-self: center;
+        }
+
+        .alert-info {
+            background-color: #00d9fbe6;
+            border-color: #d1ecf1;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .alert-success {
+            background-color: #90ee90e3;
+            border-color: #d9ffe1;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .alert-error {
+            background-color: #ffa0a9e3;
+            border-color: #ffd7d7;
+            text-align: center;
+            font-weight: 600;
+        }
+    </style>
 </head>
 
 <body class="flex items-center justify-center min-h-screen">
-  <div class="body-container flex rounded-lg shadow-2xl overflow-hidden">
-    <div class="signin-top-container hidden md:flex items-center justify-center p-8 pb-0">
-      <h2 class="text-4xl font-bold text-white text-center">
-        Sign In
-      </h2>
-    </div>
-    <div class="form-div p-8">
-      <form id="login-form" method="post">
-        {% csrf_token %}
-        <div class="mb-3">
-          <label class="block text-gray-300 font-medium ml-2 mb-1" for="email">
-            Email
-          </label>
-          <input class="w-full px-3 py-2 focus:outline-none focus:ring-2 focus:ring-white" name="email" placeholder="Enter your email" type="email"  />
+    <div class="body-container flex rounded-lg shadow-2xl overflow-hidden">
+        <div class="signin-top-container hidden md:flex items-center justify-center p-8 pb-0">
+            <h2 class="text-4xl font-bold text-white text-center">
+                Sign In
+            </h2>
         </div>
-        <div class="mb-4">
-          <label class="block text-gray-300 font-medium ml-2 mb-1" for="password">
-            Password
-          </label>
-          <input class="w-full px-3 py-2 focus:outline-none focus:ring-2 focus:ring-white" name="password" placeholder="Enter your password"
-            type="password" />
-        </div>
-        <div class="flex items-center justify-between mb-4 mt-[-10px] pl-2 pr-2">
-          <a class="text-white hover:underline" href="#">
-            Forgot password?
-          </a>
-        </div>
-        <div class="signin-btn-container">
-          <button
-            class="text-white py-2 hover:bg-[#531889] focus:outline-none focus:ring-2 focus:ring-white flex items-center justify-center"
-            type="submit">
-            Login
-          </button>
-          <div class="flex items-center justify-center ">
-            <span class="text-gray-300">or</span>
-          </div>
-          <button
-            class="text-white py-2 hover:bg-[#531889] focus:outline-none focus:ring-2 focus:ring-white flex items-center justify-center"
-            type="button">
-            <i class="fab fa-google mr-2"></i> Sign In using Google
-          </button>
-        </div>
-      </form>
+        <div class="form-div p-8">
+            <form action="/signin/" method="post">
+                {% csrf_token %}
 
-      <div class="w-[91%] flex flex-row items-center justify-between mt-5">
-        <p class="text-center text-gray-300 ">
-          Don't have an account?
-          <a class="text-white hover:underline" href="/signup">
-            Sign Up
-          </a>
-        </p>
-        <p class="text-center text-gray-600">
-          <a class="text-white hover:underline" href="/">
-            Go to Home
-          </a>
-        </p>
-      </div>
+                {% if messages %}
+                {% for data in messages %}
+                <div class="alert alert-{% if data.tags %}{{ data.tags }}{% endif %}">
+                    {{ data }}
+                </div>
+                {% endfor %}
+                {% endif %}
+                <div class="mb-3">
+                    <label class="block text-gray-300 font-medium ml-2 mb-1" for="email">
+                        Email
+                    </label>
+                    <input class="w-full px-3 py-2 focus:outline-none focus:ring-2 focus:ring-white" id="email"
+                        name="user_email" placeholder="Enter your email" type="email" value="{{user_email}}" autofocus
+                        required />
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-300 font-medium ml-2 mb-1" for="password">
+                        Password
+                    </label>
+                    <input class="w-full px-3 py-2 focus:outline-none focus:ring-2 focus:ring-white" id="password"
+                        name="user_passwd" placeholder="Enter your password" type="password"
+                        pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$!%*?&])[A-Za-z\d@#$!%*?&]{8,}"
+                        title="Password must be at least 8 characters, include an uppercase letter, a lowercase letter, a number, and a special character."
+                        required />
+                </div>
+                <div class="flex items-center justify-between mb-4 mt-[-10px] pl-2 pr-2">
+                    <a class="text-white hover:underline" href="/forgot/">
+                        Forgot password?
+                    </a>
+                </div>
+                <div class="signin-btn-container">
+                    <button
+                        class="text-white py-2 hover:bg-[#531889] focus:outline-none focus:ring-2 focus:ring-white flex items-center justify-center"
+                        type="submit">
+                        Login
+                    </button>
+                    <div class="flex items-center justify-center ">
+                        <span class="text-gray-300">or</span>
+                    </div>
+                    <button
+                        class="text-white py-2 hover:bg-[#531889] focus:outline-none focus:ring-2 focus:ring-white flex items-center justify-center"
+                        type="button">
+                        <i class="fab fa-google mr-2"></i> Sign In using Google
+                    </button>
+                </div>
+            </form>
+            <div class="w-[91%] flex flex-row items-center justify-between mt-5">
+                <p class="text-center text-gray-300 ">
+                    Don't have an account?
+                    <a class="text-white hover:underline" href="/signup">
+                        Sign Up
+                    </a>
+                </p>
+                <p class="text-center text-gray-600">
+                    <a class="text-white hover:underline" href="/">
+                        Go to Home
+                    </a>
+                </p>
+            </div>
+        </div>
     </div>
-  </div>
 </body>
 
 </html>

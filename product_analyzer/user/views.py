@@ -123,39 +123,60 @@ class ProductComparisonPage(APIView):
         
 class SignInPage(APIView):
     def get(self, request):
-        return render(request, 'login.html')
+        return render(request, "signin.html")
     
     def post(self, request):
-        email = request.POST.get('email')
-        passwd = request.POST.get('password')
-        try: 
-            user = user_details.objects.get(user_email = email)
-            if user.user_passwd == passwd:
-                request.session["user_id"] = user.user_id
+        user_email = request.POST["user_email"]
+        user_passwd = request.POST["user_passwd"]
+        print("**********", user_email, "\n-*-*-*-", user_passwd)
+        if user_details.objects.filter(user_email=user_email, user_passwd=user_passwd).exists():
+            try:
+                user_data = get_object_or_404(user_details, user_email=user_email)
+                request.session["user_id"] = user_data.user_id
+                print("User Details :- ", user_data)
+
+                # messages.success(request, "Welcome "+ user_data.user_name)
                 messages.success(request, "Login Successful, Welcome Back!")
                 return redirect('/profile')
-            else:
-                messages.error(request, "Invalid username or password.")
-        except:
-            messages.error(request, "Invalid!")
-        return render(request, 'login.html')
-        
+            except:
+                print("--------", sys.exc_info())
+        else:
+            print("---------->>> Your Email or Password is incorrect!")
+            messages.error(request, "Your Email isn't registered or Password is incorrect!")
+            messages.info(request, "Please try again..")
+            return render(request, "signin.html", {"user_email": user_email})
+
 class SignUpPage(APIView):
     def get(self, request):
-        return render(request, 'register.html')
-    
+        return render(request, "signup.html")
+
     def post(self, request):
-        username = request.POST["fullname"]
-        email = request.POST["email"]
-        password = request.POST["confirm-password"]
-        print(username, email, password)
-        if user_details.objects.filter(user_email = email).exists():
+        user_name = request.POST["user_name"]
+        user_email = request.POST["user_email"]
+        user_passwd = request.POST["user_passwd"]
+        user_c_passwd = request.POST["user_c_passwd"]
+        # created_at = timezone.now()
+
+        print(f" user_name : {user_name} \n user_email : {user_email} \n user_passwd : {user_passwd} \n user_c_passwd : {user_c_passwd}")
+
+        if user_details.objects.filter(user_email=user_email).exists():
             messages.error(request, "Email already registered!")
-            return redirect("/signup")
-        
-        user = user_details(user_name = username, user_email = email, user_passwd = password)
-        user.save()
-        return redirect("/signin")
+            return render(request, "signup.html", {"user_name": user_name, "user_passwd": user_passwd, "user_c_passwd": user_c_passwd})
+
+        if user_passwd != user_c_passwd:
+            print("-------- Both password must be same..! --------")
+            messages.info(request, "Both password must be same..!")
+            return render(request, "signup.html", {"user_name": user_name, "user_email": user_email})
+
+        user = user_details(user_name=user_name, user_email=user_email, user_passwd=user_passwd)
+
+        try:
+            user.save()
+            messages.success(request, "You are successfully registered...")
+            return render(request, "signin.html", {})
+
+        except:
+            print("---------", sys.exc_info())
     
 class ForgotPage(APIView):
     def get(self, request):
