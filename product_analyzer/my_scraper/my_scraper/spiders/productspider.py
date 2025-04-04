@@ -24,12 +24,16 @@ class ProductSpider(scrapy.Spider):
             # break
             
     def parse(self, response):
-        if "flipkart" in response.url:
-            yield from self.parse_flipkart(response)
-        elif "amazon" in  response.url:
-            yield from self.parse_amazon(response)
+        if response.status != 200:
+            self.logger.warning(f"Skipping URL due to non-200 response: {response.url} (Status: {response.status})")
+            return
         else:
-            print("Invalid URL!")
+            if "flipkart" in response.url:
+                yield from self.parse_flipkart(response)
+            elif "amazon" in  response.url:
+                yield from self.parse_amazon(response)
+            else:
+                print("Invalid URL!")
     
     def parse_flipkart(self, response):
         item = ProductDetails()
@@ -41,12 +45,8 @@ class ProductSpider(scrapy.Spider):
             
             # -------------------------------  product price -------------------------------------
             price = response.css('.Nx9bqj::text').get()
-            if price:
-                item["p_price"] = price[1:] if len(price) > 1 else "Unknown"
-                item["p_currency"] = price[0:1]
-            else:
-                item["p_price"] = "Unknown"
-                item["p_currency"] = "Unknown"
+            item["p_price"] = price[1:]
+            item["p_currency"] = price[0:1]
             # print(f"Price: {price}")
             
             # -------------------------------  product availability -------------------------------------
@@ -81,11 +81,8 @@ class ProductSpider(scrapy.Spider):
             # print(f"Product ID: {product_id}")
             
             # -------------------------------  product price -------------------------------------
-            price = response.css(".a-price-whole::text").get()
-            item["p_price"] = price if price else "Unknown"
-            
-            currency = response.css(".a-price-symbol::text").get()
-            item["p_currency"] = currency if currency else "Unknown"
+            item["p_currency"] = response.css(".a-price-symbol::text").get()
+            item["p_price"] = response.css(".a-price-whole::text").get()
                 
                 # print(f"Price: {price}")
             

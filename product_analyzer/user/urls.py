@@ -20,6 +20,9 @@ urlpatterns = [
     path("search-suggestions/", search_suggestions, name="search-suggestions"),
     path('products/', product_list, name='product-list'),
     path("search-results/", search_results, name="search-results"),
+    path('forgot/', ForgotPage.as_view(), name='forgot-page'),
+    path('send_otp/', Send_otpPage.as_view(), name='send_otp-page'),
+    
 ]
 
 if settings.DEBUG:

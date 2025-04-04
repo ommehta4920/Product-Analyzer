@@ -6,6 +6,7 @@ class user_details(models.Model):
     user_email = models.EmailField(max_length=100, unique=True)
     user_passwd = models.CharField(max_length=20, null=False)
     user_name = models.CharField(max_length=50, null=False)
+    user_otp = models.CharField(null=True, max_length=10)
     
     def __str__(self):
         return f"{self.user_email} - {self.user_name}"

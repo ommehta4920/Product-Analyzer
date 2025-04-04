@@ -25,44 +25,45 @@
 
 <body class="bg-gray-100 select-none font-roboto bg-gray-100">
     <!-- Header -->
-    <header class="header fixed w-full z-10 top-0 left-0 mx-auto px-4 py-4 flex justify-between align-items-center items-center text-lg">
-            <div class="items-center space-x-4 ml-20 w-100">
-                <nav class="space-x-6 flex items-center text-base w-100">
-                    <div class="main-nav w-75">
-                        <a class=" text-2xl font-bold text-white ml-4 transition-all duration-300 tracking-tighter"
+    <header
+        class="header fixed w-full z-10 top-0 left-0 mx-auto px-4 py-4 flex justify-between align-items-center items-center text-lg">
+        <div class="items-center space-x-4 ml-20 w-100">
+            <nav class="space-x-6 flex items-center text-base w-100">
+                <div class="main-nav w-75">
+                    <a class=" text-2xl font-bold text-white ml-4 transition-all duration-300 tracking-tighter"
                         href="/">
-                            <h1>Product Analyzer</h1>
-                        </a>
-                        <a class="header-link text-white mt-1 hover:underline underline-offset-4 transition-all duration-300 uppercase"
-                            href="/comparison">
-                            Comparisons
-                        </a>
-                        <a class="header-link text-white mt-1 hover:underline underline-offset-4 transition-all duration-300 uppercase"
-                            href="/category">
-                            Categories
-                        </a>
-                        <a class="header-link text-white mt-1 hover:underline underline-offset-4 transition-all duration-300 uppercase"
-                            href="#">
-                            About Us
-                        </a>
-                    </div>
-                    <div class="login mr-20 w-25">
-                        {% if request.session.user_id %}
-                            <!-- If user is logged in, show profile and logout -->
-                            <a class="text-white header-link mt-1 transition-all duration-300 uppercase mr-4" href="/profile">
-                                <i class="fas fa-user text-white text-l"></i> Profile
-                            </a>
-                            <a class="text-white header-link mt-1 transition-all duration-300 uppercase mr-4" href="/logout">
-                                <i class="fas fa-sign-out-alt text-white text-l"></i> Logout
-                            </a>
-                        {% else %}
-                            <!-- If user is not logged in, show login button -->
-                            <a class="text-white header-link mt-1 transition-all duration-300 uppercase mr-4" href="/signin">
-                                <i class="fas fa-user text-white text-l"></i> Login
-                            </a>
-                        {% endif %}
-                    </div>
-                </nav>
+                        <h1>Product Analyzer</h1>
+                    </a>
+                    <a class="header-link text-white mt-1 hover:underline underline-offset-4 transition-all duration-300 uppercase"
+                        href="/comparison">
+                        Comparisons
+                    </a>
+                    <a class="header-link text-white mt-1 hover:underline underline-offset-4 transition-all duration-300 uppercase"
+                        href="/category">
+                        Categories
+                    </a>
+                    <a class="header-link text-white mt-1 hover:underline underline-offset-4 transition-all duration-300 uppercase"
+                        href="#">
+                        About Us
+                    </a>
+                </div>
+                <div class="login mr-20 w-25">
+                    {% if request.session.user_id %}
+                    <!-- If user is logged in, show profile and logout -->
+                    <a class="text-white header-link mt-1 transition-all duration-300 uppercase mr-4" href="/profile">
+                        <i class="fas fa-user text-white text-l"></i> Profile
+                    </a>
+                    <a class="text-white header-link mt-1 transition-all duration-300 uppercase mr-4" href="/logout">
+                        <i class="fas fa-sign-out-alt text-white text-l"></i> Logout
+                    </a>
+                    {% else %}
+                    <!-- If user is not logged in, show login button -->
+                    <a class="text-white header-link mt-1 transition-all duration-300 uppercase mr-4" href="/signin">
+                        <i class="fas fa-user text-white text-l"></i> Login
+                    </a>
+                    {% endif %}
+                </div>
+            </nav>
         </div>
     </header>
 

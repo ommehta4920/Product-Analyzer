@@ -1,0 +1,238 @@
+{% load static %}
+
+<html>
+
+<head>
+    <title>
+        Product Analyzer - Forgot Password
+    </title>
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}"/>
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/favicon.png' %}">
+    <style>
+        body {
+            background: radial-gradient(ellipse 120% 210% at 95% 0, #531889 10%, #000 70%);
+        }
+    </style>
+    <style>
+        .alert {padding: 5px 30px 5px 30px; margin: 5px 15px 25px 15px; border: 3.5px solid transparent; border-radius: 25px; width: max-content; justify-self: center;}
+        .alert-info {background-color: #00d9fbe6; border-color: #d1ecf1; text-align: center; font-weight: 600;}
+        .alert-success {background-color: #90ee90e3; border-color: #d9ffe1; text-align: center; font-weight: 600;}
+        .alert-error {background-color: #ffa0a9e3; border-color: #ffd7d7; text-align: center; font-weight: 600;}
+        .form-div{
+            margin-top: 15px;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+
+<body class="flex items-center justify-center min-h-screen" onload="visible_form()">
+<div class="body-container flex rounded-lg shadow-2xl overflow-hidden">
+    <div class="signup-top-container hidden md:flex items-center justify-center p-8 pb-0">
+        <h2 class="text-4xl font-bold text-white text-center" id="form_heading">
+            Forgot Password
+        </h2>
+    </div>
+    <div class="form-div p-8">
+        <form action="/send_otp/" method="post" id="sendOTP_form">
+            {% csrf_token %}
+
+            {% if messages %}
+            {% for data in messages %}
+            <div class="alert alert-{% if data.tags %}{{ data.tags }}{% endif %}">
+                {{ data }}
+            </div>
+            {% endfor %}
+            {% endif %}
+            <div class="mb-3">
+                <label class="block text-gray-300 font-medium ml-2 mb-1" for="email">
+                    Email
+                </label>
+                <input class="w-full px-3 py-2 focus:outline-none focus:ring-2 focus:ring-white" id="email"
+                       name="user_email"
+                       placeholder="Enter your email" type="email" autofocus required/>
+            </div>
+            <br/>
+            <div>
+                <button
+                        class="text-white py-2 hover:bg-[#531889] focus:outline-none focus:ring-2 focus:ring-white flex items-center justify-center"
+                        type="submit">
+                    Send OTP
+                </button>
+                <!--                    <div class="flex items-center justify-center ">-->
+                <!--                        <span class="text-gray-300">or</span>-->
+                <!--                    </div>-->
+                <!--                    <button-->
+                <!--                        class="text-white py-2 hover:bg-[#531889] focus:outline-none focus:ring-2 focus:ring-white flex items-center justify-center"-->
+                <!--                        type="button">-->
+                <!--                        <i class="fab fa-google mr-2"></i> Sign In using Google-->
+                <!--                    </button>-->
+            </div>
+        </form>
+        <form action="/forgot/" method="post" id="login_form">
+            {% csrf_token %}
+
+            {% if messages %}
+            {% for data in messages %}
+            <div class="alert alert-{% if data.tags %}{{ data.tags }}{% endif %}">
+                {{ data }}
+            </div>
+            {% endfor %}
+            {% endif %}
+            <div class="mb-3">
+                <label class="block text-gray-300 font-medium ml-2 mb-1" for="email">
+                    Email
+                </label>
+                <input class="w-full px-3 py-2 focus:outline-none focus:ring-2 focus:ring-white" id="email"
+                       name="login_user_email" value="{{email}}"
+                       placeholder="Enter your email" type="email" required readonly/>
+            </div>
+            <div class="mb-3">
+                <label class="block text-gray-300 font-medium ml-2 mb-1" for="otp">
+                    OTP
+                </label>
+                <input class="w-full px-3 py-2 focus:outline-none focus:ring-2 focus:ring-white" id="otp"
+                       name="user_otp" placeholder="Enter your OTP" type="text" maxlength="4" value="{{user_otp}}"
+                       pattern="[?=.*\d]{4}" title="OTP must be in 4 digits" autofocus required/>
+<!--                <span id="OtpError"></span>-->
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-300 font-medium ml-2 mb-1" for="password">
+                    Password
+                </label>
+                <input class="w-full px-3 py-2 focus:outline-none focus:ring-2 focus:ring-white" id="password"
+                       name="user_passwd" placeholder="Enter your password" type="password" value="{{user_passwd}}"
+                       pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$!%*?&])[A-Za-z\d@#$!%*?&]{8,}"
+                       title="Password must be at least 8 characters, include an uppercase letter, a lowercase letter, a number, and a special character."
+                       required/>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-300 font-medium ml-2 mb-1" for="confirm-password">
+                    Confirm Password
+                </label>
+                <input class="w-full px-3 py-2 focus:outline-none focus:ring-2 focus:ring-white" name="user_c_passwd"
+                       id="confirm-password" placeholder="Retype your password" type="password"
+                       value="{{user_c_passwd}}"
+                       pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$!%*?&])[A-Za-z\d@#$!%*?&]{8,}"
+                       title="Password must be at least 8 characters, include an uppercase letter, a lowercase letter, a number, and a special character."
+                       required/>
+            </div>
+            <br/>
+            <div>
+                <button
+                        class="text-white py-2 hover:bg-[#531889] focus:outline-none focus:ring-2 focus:ring-white flex items-center justify-center"
+                        type="submit">
+                    Set New Password
+                </button>
+            </div>
+        </form>
+        <div class="w-[91%] flex flex-row items-center justify-between mt-5">
+            <!--                <p class="text-center text-gray-300 ">-->
+            <!--                    Don't have an account?-->
+            <!--                    <a class="text-white hover:underline" href="/signup">-->
+            <!--                        Sign Up-->
+            <!--                    </a>-->
+            <!--                </p>-->
+            <p class="text-center text-gray-600" style="width: 100%; display: flex; flex-direction: row; justify-content: space-between ">
+                <a class="text-white hover:underline" href="/">
+                    Go to Home
+                </a>
+                <a class="text-white hover:underline" href="/signin">
+                    Go to Sign In
+                </a>
+            </p>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+        function visible_form() {
+            // alert("Go Ahead..");
+            const F_Heading = document.getElementById('form_heading');
+            const S_Form = document.getElementById('sendOTP_form');
+            const L_Form = document.getElementById('login_form');
+
+            {% if visibility %}
+                F_Heading.textContent = "Reset Password";
+                L_Form.style.display = 'block';
+                S_Form.style.display = 'none';
+            {% else %}
+                S_Form.style.display = 'block';
+                L_Form.style.display = 'none';
+            {% endif %}
+        }
+
+</script>
+
+<!--<script src="{% static 'js/validation.js' %}"></script>-->
+
+</body>
+
+</html>
+<!--                <div align="center">-->
+<!--                    <label>Email:</label>-->
+<!--                    <input type="email" name="user_email" id="email" placeholder="example@gmail.com" autofocus>-->
+
+<!--                    &emsp;-->
+
+<!--                    <button type="submit">Send OTP</button>-->
+
+<!--                    <br>-->
+
+<!--                </div>-->
+<!--            </form>-->
+<!--    -->
+<!--            <br>-->
+<!--    -->
+<!--            <form action="/forgot/" method="post" id="login_form">-->
+<!--                {% csrf_token %}-->
+<!--                    <div align="center">-->
+<!--    -->
+<!--                        <label>OTP:</label>-->
+<!--                        <input type="text" name="user_otp" placeholder="Enter OTP" maxlength="4" required>-->
+<!--                        <br>-->
+<!--                        <br>-->
+<!--                        <label>Password:</label>-->
+<!--                        <input type="password" name="user_passwd" placeholder="Password" required>-->
+<!--    -->
+<!--                        <br>-->
+<!--                        <br>-->
+<!--    -->
+<!--                        <button type="submit">Reset New Password</button>-->
+<!--    -->
+<!--                    </div>-->
+<!--                    <br>-->
+<!--            </form>-->
+<!--            <div class="w-[91%] flex flex-row items-center justify-between mt-5">-->
+<!--                <p class="text-center text-gray-300 ">-->
+<!--                    Don't have an account?-->
+<!--                    <a class="text-white hover:underline" href="/signup">-->
+<!--                        Sign Up-->
+<!--                    </a>-->
+<!--                </p>-->
+<!--                <p class="text-center text-gray-600">-->
+<!--                    <a class="text-white hover:underline" href="/">-->
+<!--                        Go to Home-->
+<!--                    </a>-->
+<!--                </p>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</body>-->
+
+<!--</html>-->
+
+<!--            {% for data in messages %}-->
+<!--            <div align="center" style="color:red;">-->
+<!--                {{ data }}-->
+<!--            </div>-->
+<!--            {% endfor %}-->
+
+
+<!--</body>-->
+<!--</html>-->

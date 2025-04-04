@@ -157,6 +157,84 @@ class SignUpPage(APIView):
         user.save()
         return redirect("/signin")
     
+class ForgotPage(APIView):
+    def get(self, request):
+        return render(request, "forgot.html")
+
+    def post(self, request):
+        user_otp = request.POST["user_otp"]
+        user_passwd = request.POST["user_passwd"]
+        user_c_passwd = request.POST["user_c_passwd"]
+        user_email = request.POST["login_user_email"]
+        # user_email = 'ommehta4920@gmail.com'
+
+        print("**********", user_otp, "\n-*-*-*-", user_passwd, "\n-*-*-*-", user_c_passwd, "\n-*-*-*-", user_email)
+
+        if user_details.objects.filter(user_email=user_email, user_otp=user_otp).exists():
+
+            if user_passwd != user_c_passwd:
+                print("-------- Both password must be same..! --------")
+                messages.info(request, "Both password must be same..!")
+
+                return render(request, "forgot.html", {"visibility": True, "user_otp": user_otp, "email": user_email})
+
+            try:
+                user = user_details.objects.filter(user_email=user_email, user_otp=user_otp)
+                user.update(user_passwd=user_passwd)
+
+                print("<<--------- Password has been successfully reset... ---------->>")
+                messages.success(request, "Password has been successfully reset...")
+
+                return redirect("/signin")
+
+            except:
+                print("--------", sys.exc_info())
+
+        else:
+            print("-------- OTP is incorrect! --------")
+            messages.error(request, "OTP is incorrect!")
+
+        return render(request, "forgot.html", {"visibility": True, "email": user_email, "user_passwd": user_passwd, "user_c_passwd": user_c_passwd})
+
+class Send_otpPage(APIView):
+    def get(self):
+        return redirect("/forgot")
+
+    def post(self, request):
+        otp = random.randint(1000, 9999)
+        user_email = request.POST["user_email"]
+
+        # request.session['temail'] = user_email
+        #
+        # print("Session temail :", request.session['temail'])
+
+        if user_details.objects.filter(user_email=user_email).exists():
+
+            try:
+                user = user_details.objects.filter(user_email=user_email)
+                user.update(user_otp=str(otp))
+
+                subject = "Your Product Analyzer Portal OTP"
+                message = "Dear user, you want to reset your password of your Product Analyzer account. \n\n Use OTP: " + str(otp) + "\n\nNote: Do not share the OTP with anyone else."
+                email_from = settings.EMAIL_HOST_USER
+                recipient_list = [user_email, ]
+
+                send_mail(subject, message, email_from, recipient_list)
+
+                print("**********", subject, "\n-*-*-*-", message, "\n-*-*-*-", email_from, "\n-*-*-*-", recipient_list)
+
+                messages.info(request, "OTP has been sent to your registered email..!")
+
+                return render(request, "forgot.html", {"visibility": True, "email": user_email})
+
+            except:
+                print("---------", sys.exc_info())
+                return render(request, "forgot.html", {})
+
+        else:
+            messages.error(request, "Email is not registered!")
+            return render(request, "forgot.html", {})
+    
 class ProfilePage(View):
     def get(self, request):
         userid = request.session.get("user_id")

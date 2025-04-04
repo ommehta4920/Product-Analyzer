@@ -22,7 +22,7 @@ app.conf.beat_schedule = {
     },
     'Product-Scrapper': {
         'task': 'user.tasks.productScrapper',
-        'schedule': crontab(hour="14", minute="15")
+        'schedule': crontab(hour="14", minute="08")
     }
 }
 
