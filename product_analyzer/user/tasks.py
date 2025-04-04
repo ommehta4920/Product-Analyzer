@@ -20,3 +20,4 @@ def productScrapper(self):
     project_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../my_scraper")
     subprocess.run(["scrapy", "crawl", "productSpider"], cwd=project_path)
     return "Product-Scrapping Done"
+

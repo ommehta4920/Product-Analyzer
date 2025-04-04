@@ -260,4 +260,6 @@ def search_results(request):
         'products': products_list,
         'query': query,
     })
+    
+
 
